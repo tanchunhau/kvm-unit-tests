@@ -7,12 +7,12 @@ int clock_srvgrp_probe(void)
 {
     printf("clock_srvgrp_probe\n");
     struct sbiret sret;
-    unsigned long val;
+    //unsigned long val;
 
     sret = sbi_ecall(SBI_EXT_RPXY, SBI_EXT_RPXY_PROBE,
                      expected_clock_tpid, RPMI_SRVGRP_CLOCK, 0, 0, 0, 0);
 
-    val = sret.value;
+    //val = sret.value;
 
     return sret.error;
 }
