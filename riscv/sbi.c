@@ -4,9 +4,9 @@
  *
  * Copyright (C) 2023, Ventana Micro Systems Inc., Andrew Jones <ajones@ventanamicro.com>
  */
-#include <libcflat.h>
 #include <alloc_page.h>
 #include <cpumask.h>
+#include <libcflat.h>
 #include <limits.h>
 #include <memregions.h>
 #include <on-cpus.h>
@@ -29,6 +29,7 @@
 #include <asm/timer.h>
 
 #include "sbi-tests.h"
+#include "mpxy/mpxy.h"
 
 #define	HIGH_ADDR_BOUNDARY	((phys_addr_t)1 << 32)
 
@@ -1437,6 +1438,11 @@ static void check_susp(void)
 	report_prefix_pop();
 }
 
+static void check_mpxy(void)
+{
+	check_mpxy_clock();
+}
+
 int main(int argc, char **argv)
 {
 	if (argc > 1 && !strcmp(argv[1], "-h")) {
@@ -1445,6 +1451,7 @@ int main(int argc, char **argv)
 	}
 
 	report_prefix_push("sbi");
+	check_mpxy();
 	check_base();
 	check_time();
 	check_ipi();
