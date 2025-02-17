@@ -23,4 +23,6 @@ int check_mpxy_clock(void)
     if (has_clock_srvgrp) {
         clock_srvgrp_probe();
     }
+
+    return 0;
 }
