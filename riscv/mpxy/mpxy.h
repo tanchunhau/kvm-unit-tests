@@ -24,7 +24,7 @@ struct sbi_rpxy {
         bool active;
 };
 
-struct sbi_rpxy g_rpxy;
+
 
 enum rpmi_clock_service_id {
         RPMI_CLK_SRV_ENABLE_NOTIFICATION = 0x01,
