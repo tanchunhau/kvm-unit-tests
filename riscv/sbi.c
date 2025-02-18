@@ -1441,6 +1441,7 @@ static void check_susp(void)
 
 static void check_mpxy(void)
 {
+	struct sbi_rpxy g_rpxy;
 	g_rpxy.shmem = memalign(SHMEM_PAGE_SIZE, SHMEM_PAGE_SIZE);
 	g_rpxy.shmem_phys = (unsigned long long)g_rpxy.shmem;
 	g_rpxy.active = true;
