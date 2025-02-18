@@ -1465,6 +1465,7 @@ static void check_mpxy(void)
 	printf("total channel count = %u\n", channel_count);
 
 	// 3. SBI_EXT_MPXY_GET_CHANNEL_IDS (get channel ids)
+	u32 channel_ids[100];
 	u32 remaining, returned, sidx, start_index = 0, cidx = 0;
 	do {
 		sret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_GET_CHANNEL_IDS,
@@ -1475,13 +1476,12 @@ static void check_mpxy(void)
 		returned = sdata->returned;
 
 		for (sidx = 0; sidx < returned && cidx < channel_count; sidx++) {
-			channel_ids[cidx] = le32_to_cpu(sdata->channel_array[sidx]);
+			channel_ids[cidx] = sdata->channel_array[sidx];
+			printf("channel_ids[%u] = %u\n", cidx, channel_ids[cidx]);
 			cidx += 1;
 		}
 
 		start_index = cidx;
-
-
 	} while (remaining);
 
 
