@@ -5,6 +5,7 @@
  * Copyright (C) 2023, Ventana Micro Systems Inc., Andrew Jones <ajones@ventanamicro.com>
  */
 #include <libcflat.h>
+#include <alloc.h>
 #include <alloc_page.h>
 #include <cpumask.h>
 #include <limits.h>

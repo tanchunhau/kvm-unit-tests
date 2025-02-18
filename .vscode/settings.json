@@ -1,5 +1,6 @@
 {
         "files.associations": {
-                "cpumask.h": "c"
+                "cpumask.h": "c",
+                "alloc.h": "c"
         }
 }
