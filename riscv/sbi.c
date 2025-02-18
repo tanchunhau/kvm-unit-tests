@@ -1455,14 +1455,36 @@ static void check_mpxy(void)
 	printf("1.) SBI_EXT_MPXY_SET_SHMEM sret.error = %ld\n",sret.error);
 
 
-	// 2. SBI_EXT_MPXY_GET_CHANNEL_IDS
+	// 2. SBI_EXT_MPXY_GET_CHANNEL_IDS (get channel count)
 	struct sbi_mpxy_channel_ids_data *sdata = g_rpxy.shmem;
 
 	sret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_GET_CHANNEL_IDS,
 			0, 0, 0, 0, 0, 0);
 	printf("2.) SBI_EXT_MPXY_GET_CHANNEL_IDS sret.error = %ld\n",sret.error);
-	u32 total = sdata->remaining + sdata->returned;
-	printf("total channel count = %u\n", total);
+	u32 channel_count = sdata->remaining + sdata->returned;
+	printf("total channel count = %u\n", channel_count);
+
+	// 3. SBI_EXT_MPXY_GET_CHANNEL_IDS (get channel ids)
+	u32 remaining, returned, sidx, start_index = 0, cidx = 0;
+	do {
+		sret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_GET_CHANNEL_IDS,
+			start_index, 0, 0, 0, 0, 0);
+		printf("3.) SBI_EXT_MPXY_GET_CHANNEL_IDS sret.error = %ld\n",sret.error);
+		if (sret.error) {break;}
+		remaining = sdata->remaining;
+		returned = sdata->returned;
+
+		for (sidx = 0; sidx < returned && cidx < channel_count; sidx++) {
+			channel_ids[cidx] = le32_to_cpu(sdata->channel_array[sidx]);
+			cidx += 1;
+		}
+
+		start_index = cidx;
+
+
+	} while (remaining);
+
+
 
 	check_mpxy_clock();
 }
