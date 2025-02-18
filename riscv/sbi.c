@@ -1440,6 +1440,13 @@ static void check_susp(void)
 
 static void check_mpxy(void)
 {
+	g_rpxy.shmem = memalign(SHMEM_PAGE_SIZE, SHMEM_PAGE_SIZE);
+	g_rpxy.shmem_phys = (unsigned long long)g_rpxy.shmem;
+	g_rpxy.active = true;
+	struct sbiret sret;
+	sret = sbi_ecall(SBI_EXT_RPXY, SBI_EXT_RPXY_SETUP_SHMEM,
+		SHMEM_PAGE_SIZE, g_rpxy.shmem_phys, 0, 0, 0, 0);
+	printf("init sret.error = %ld\n",sret.error);
 	check_mpxy_clock();
 }
 

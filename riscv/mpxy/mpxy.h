@@ -1,5 +1,7 @@
 /* SPDX-License-Identifier: GPL-2.0-only */
 
+#define SHMEM_PAGE_SIZE 4096
+
 //#define SBI_EXT_BASE            0x10
 //#define RPMI_SRVGRP_VOLTAGE     0x00006
 #define RPMI_SRVGRP_CLOCK       0x00007
@@ -21,6 +23,8 @@ struct sbi_rpxy {
         unsigned long long shmem_phys;
         bool active;
 };
+
+struct sbi_rpxy g_rpxy;
 
 enum rpmi_clock_service_id {
         RPMI_CLK_SRV_ENABLE_NOTIFICATION = 0x01,
