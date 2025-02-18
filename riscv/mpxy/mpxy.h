@@ -4,7 +4,7 @@
 
 //#define SBI_EXT_BASE            0x10
 //#define RPMI_SRVGRP_VOLTAGE     0x00006
-#define RPMI_SRVGRP_CLOCK       0x00007
+//#define RPMI_SRVGRP_CLOCK       0x00007
 //#define RPMI_SRVGRP_POWER_DOMAIN   0x00008
 //#define RPMI_SRVGRP_PERFORMANCE    0x00009
 //#define SBI_EXT_RPXY            0x52505859
