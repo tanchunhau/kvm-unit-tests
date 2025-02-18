@@ -1464,12 +1464,15 @@ int main(int argc, char **argv)
 
 	report_prefix_push("sbi");
 	check_mpxy();
-	//check_base();
-	//check_time();
-	//check_ipi();
-	//check_hsm();
-	//check_dbcn();
-	//check_susp();
+	if (false) {
+		check_base();
+		check_time();
+		check_ipi();
+		check_hsm();
+		check_dbcn();
+		check_susp();
+	}
+
 
 	return report_summary();
 }
