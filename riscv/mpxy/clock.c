@@ -12,6 +12,8 @@ int clock_srvgrp_probe(void)
     //sret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_RPXY_PROBE, expected_clock_tpid, RPMI_SRVGRP_CLOCK, 0, 0, 0, 0);
 
     //val = sret.value;
+    sret.value = 0;
+    sret.error = 0;
 
     printf("sret.value = %ld\n", sret.value);
     printf("sret.error = %ld\n", sret.error);
