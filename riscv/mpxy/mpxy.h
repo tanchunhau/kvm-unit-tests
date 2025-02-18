@@ -15,6 +15,13 @@ enum sbi_ext_rpxy_fid {
         SBI_EXT_RPXY_GET_NOTIFICATIONS,
 };
 
+struct sbi_rpxy {
+        void *shmem;
+        //void *shmem_phys;
+        unsigned long long shmem_phys;
+        bool active;
+};
+
 enum rpmi_clock_service_id {
         RPMI_CLK_SRV_ENABLE_NOTIFICATION = 0x01,
         RPMI_CLK_SRV_GET_SYSTEM_CLOCKS = 0x02,

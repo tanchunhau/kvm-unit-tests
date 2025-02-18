@@ -14,6 +14,8 @@ int clock_srvgrp_probe(void)
 
     //val = sret.value;
 
+    printf("sret.value = %ld\n", sret.value);
+    printf("sret.error = %ld\n", sret.error);
     return sret.error;
 }
 
