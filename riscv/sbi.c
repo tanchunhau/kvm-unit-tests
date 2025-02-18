@@ -1441,8 +1441,9 @@ static void check_susp(void)
 struct sbi_rpxy g_rpxy;
 static void check_mpxy(void)
 {
-	printf("Test 01\n");
+	printf("Test 02\n");
 
+	// 1. SBI_EXT_MPXY_SET_SHMEM
 	g_rpxy.shmem = memalign(SHMEM_PAGE_SIZE, SHMEM_PAGE_SIZE);
 	g_rpxy.shmem_phys = virt_to_phys(g_rpxy.shmem);
 	g_rpxy.active = true;
@@ -1450,8 +1451,19 @@ static void check_mpxy(void)
 	sret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_SET_SHMEM,
 		SHMEM_PAGE_SIZE, g_rpxy.shmem_phys, 0, 0, 0, 0);
 
-	printf("init sret.value = %ld\n",sret.value);
-	printf("init sret.error = %ld\n",sret.error);
+	printf("1.) sret.value = %ld\n",sret.value);
+	printf("2.) sret.error = %ld\n",sret.error);
+
+
+	// 2. SBI_EXT_MPXY_GET_CHANNEL_IDS
+	struct sbi_mpxy_channel_ids_data *sdata = g_rpxy.shmem;
+
+	sret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_GET_CHANNEL_IDS,
+			0, 0, 0, 0, 0, 0);
+	printf("2.) sret.error = %ld\n",sret.error);
+	u32 total = sdata->remaining + sdata->returned;
+	printf("total channel count = %u\n", total);
+
 	check_mpxy_clock();
 }
 

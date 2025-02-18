@@ -9,13 +9,35 @@
 //#define RPMI_SRVGRP_PERFORMANCE    0x00009
 //#define SBI_EXT_RPXY            0x52505859
 #define SBI_EXT_MPXY            0x4D505859
-#define SBI_EXT_MPXY_SET_SHMEM 0x0
-enum sbi_ext_rpxy_fid {
-        SBI_EXT_RPXY_PROBE = 0,
-        SBI_EXT_RPXY_SETUP_SHMEM,
-        SBI_EXT_RPXY_SEND_NORMAL_MSG,
-        SBI_EXT_RPXY_SEND_POSTED_MSG,
-        SBI_EXT_RPXY_GET_NOTIFICATIONS,
+/* SBI function IDs for MPXY extension */
+#define SBI_EXT_MPXY_SET_SHMEM			0x0
+#define SBI_EXT_MPXY_GET_CHANNEL_IDS		0x1
+#define SBI_EXT_MPXY_READ_ATTRS			0x2
+#define SBI_EXT_MPXY_WRITE_ATTRS		0x3
+#define SBI_EXT_MPXY_SEND_MSG_WITH_RESP		0x4
+#define SBI_EXT_MPXY_SEND_MSG_NO_RESP		0x5
+#define SBI_EXT_MPXY_GET_NOTIFICATION_EVENTS	0x6
+
+enum rpmi_servicegroup_id {
+	RPMI_SRVGRP_ID_MIN = 0,
+	RPMI_SRVGRP_BASE = 0x0001,
+	RPMI_SRVGRP_SYSTEM_RESET = 0x0003,
+	RPMI_SRVGRP_SYSTEM_SUSPEND = 0x0004,
+	RPMI_SRVGRP_HSM = 0x0005,
+	RPMI_SRVGRP_CPPC = 0x0006,
+	RPMI_SRVGRP_VOLTAGE = 0x00007,
+	RPMI_SRVGRP_CLOCK = 0x0008,
+	RPMI_SRVGRP_DEVICE_POWER = 0x00009,
+	RPMI_SRVGRP_PERFORMANCE = 0x0000A,
+	RPMI_SRVGRP_ID_MAX_COUNT,
+
+	/* Reserved range for service groups */
+	RPMI_SRVGRP_RESERVE_START = RPMI_SRVGRP_ID_MAX_COUNT,
+	RPMI_SRVGRP_RESERVE_END = 0x7FFF,
+
+	/* Vendor/Implementation-specific service groups range */
+	RPMI_SRVGRP_VENDOR_START = 0x8000,
+	RPMI_SRVGRP_VENDOR_END = 0xFFFF,
 };
 
 struct sbi_rpxy {
@@ -23,6 +45,16 @@ struct sbi_rpxy {
         //void *shmem_phys;
         unsigned long long shmem_phys;
         bool active;
+};
+
+/* SBI MPXY channel IDs data in shared memory */
+struct sbi_mpxy_channel_ids_data {
+	/* Remaining number of channel ids */
+	u32 remaining;
+	/* Returned channel ids in current function call */
+	u32 returned;
+	/* Returned channel id array */
+	u32 channel_array[];
 };
 
 
