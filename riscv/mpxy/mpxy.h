@@ -9,7 +9,7 @@
 //#define RPMI_SRVGRP_PERFORMANCE    0x00009
 //#define SBI_EXT_RPXY            0x52505859
 #define SBI_EXT_MPXY            0x4D505859
-
+#define SBI_EXT_MPXY_SET_SHMEM 0x0
 enum sbi_ext_rpxy_fid {
         SBI_EXT_RPXY_PROBE = 0,
         SBI_EXT_RPXY_SETUP_SHMEM,
