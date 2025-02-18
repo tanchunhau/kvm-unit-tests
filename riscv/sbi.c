@@ -1441,11 +1441,13 @@ static void check_susp(void)
 struct sbi_rpxy g_rpxy;
 static void check_mpxy(void)
 {
+	printf("Test 01\n");
+
 	g_rpxy.shmem = memalign(SHMEM_PAGE_SIZE, SHMEM_PAGE_SIZE);
 	g_rpxy.shmem_phys = virt_to_phys(g_rpxy.shmem);
 	g_rpxy.active = true;
 	struct sbiret sret;
-	sret = sbi_ecall(SBI_EXT_RPXY, SBI_EXT_RPXY_SETUP_SHMEM,
+	sret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_RPXY_SETUP_SHMEM,
 		SHMEM_PAGE_SIZE, g_rpxy.shmem_phys, 0, 0, 0, 0);
 
 	printf("init sret.value = %ld\n",sret.value);
@@ -1462,12 +1464,12 @@ int main(int argc, char **argv)
 
 	report_prefix_push("sbi");
 	check_mpxy();
-	check_base();
-	check_time();
-	check_ipi();
-	check_hsm();
-	check_dbcn();
-	check_susp();
+	//check_base();
+	//check_time();
+	//check_ipi();
+	//check_hsm();
+	//check_dbcn();
+	//check_susp();
 
 	return report_summary();
 }

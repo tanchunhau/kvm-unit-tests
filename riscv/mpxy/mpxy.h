@@ -7,7 +7,8 @@
 #define RPMI_SRVGRP_CLOCK       0x00007
 //#define RPMI_SRVGRP_POWER_DOMAIN   0x00008
 //#define RPMI_SRVGRP_PERFORMANCE    0x00009
-#define SBI_EXT_RPXY            0x52505859
+##define SBI_EXT_RPXY            0x52505859
+#define SBI_EXT_MPXY            0x4D505859
 
 enum sbi_ext_rpxy_fid {
         SBI_EXT_RPXY_PROBE = 0,

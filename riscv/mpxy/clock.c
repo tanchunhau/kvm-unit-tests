@@ -9,7 +9,7 @@ int clock_srvgrp_probe(void)
     struct sbiret sret;
     //unsigned long val;
 
-    sret = sbi_ecall(SBI_EXT_RPXY, SBI_EXT_RPXY_PROBE,
+    sret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_RPXY_PROBE,
                      expected_clock_tpid, RPMI_SRVGRP_CLOCK, 0, 0, 0, 0);
 
     //val = sret.value;
