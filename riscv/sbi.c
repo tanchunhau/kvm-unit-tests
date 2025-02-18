@@ -1451,8 +1451,8 @@ static void check_mpxy(void)
 	sret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_SET_SHMEM,
 		SHMEM_PAGE_SIZE, g_rpxy.shmem_phys, 0, 0, 0, 0);
 
-	printf("1.) sret.value = %ld\n",sret.value);
-	printf("2.) sret.error = %ld\n",sret.error);
+	printf("1.) SBI_EXT_MPXY_SET_SHMEM sret.value = %ld\n",sret.value);
+	printf("1.) SBI_EXT_MPXY_SET_SHMEM sret.error = %ld\n",sret.error);
 
 
 	// 2. SBI_EXT_MPXY_GET_CHANNEL_IDS
@@ -1460,7 +1460,7 @@ static void check_mpxy(void)
 
 	sret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_GET_CHANNEL_IDS,
 			0, 0, 0, 0, 0, 0);
-	printf("2.) sret.error = %ld\n",sret.error);
+	printf("2.) SBI_EXT_MPXY_GET_CHANNEL_IDS sret.error = %ld\n",sret.error);
 	u32 total = sdata->remaining + sdata->returned;
 	printf("total channel count = %u\n", total);
 
