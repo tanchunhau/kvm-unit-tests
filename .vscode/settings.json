@@ -1,6 +1,7 @@
 {
         "files.associations": {
                 "cpumask.h": "c",
-                "alloc.h": "c"
+                "alloc.h": "c",
+                "libcflat.h": "c"
         }
 }

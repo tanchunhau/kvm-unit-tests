@@ -1486,7 +1486,7 @@ static void check_mpxy(void)
 
 
 
-	check_mpxy_clock();
+	//check_mpxy_clock();
 }
 
 int main(int argc, char **argv)
