@@ -30,7 +30,7 @@
 #include <asm/timer.h>
 
 #include "sbi-tests.h"
-#include "mpxy/mpxy.h"
+#include "mpxy.h"
 
 #define	HIGH_ADDR_BOUNDARY	((phys_addr_t)1 << 32)
 
