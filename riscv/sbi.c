@@ -1491,7 +1491,7 @@ static void check_mpxy(void)
 
 	printf("4.) SBI_EXT_MPXY_READ_ATTRS sret.error = %ld\n",sret.error);
 	if (!sret.error) {
-		for (int i = 0; i < attr_count; i++)
+		//for (int i = 0; i < attr_count; i++)
 			//attrs_buf[i] = le32_to_cpu(((__le32 *)mpxy->shmem)[i]);
 	}
 
