@@ -1441,18 +1441,32 @@ static void check_susp(void)
 struct sbi_rpxy g_rpxy;
 static void check_mpxy(void)
 {
-	printf("Test 02\n");
+	printf("Test 03\n");
+	struct sbiret ret;
+	long expected;
+
+	report_prefix_push("mpxy");
+
+	if (!sbi_probe(SBI_EXT_MPXY)) {
+		report_skip("MPXY extension not available");
+		report_prefix_pop();
+		return;
+	}
 
 	// 1. SBI_EXT_MPXY_SET_SHMEM
-	g_rpxy.shmem = memalign(SHMEM_PAGE_SIZE, SHMEM_PAGE_SIZE);
+	g_rpxy.shmem = alloc_page(); //memalign(SHMEM_PAGE_SIZE, SHMEM_PAGE_SIZE);
 	g_rpxy.shmem_phys = virt_to_phys(g_rpxy.shmem);
 	g_rpxy.active = true;
-	struct sbiret sret;
-	sret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_SET_SHMEM,
+
+	ret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_SET_SHMEM,
 		SHMEM_PAGE_SIZE, g_rpxy.shmem_phys, 0, 0, 0, 0);
 
-	printf("1.) SBI_EXT_MPXY_SET_SHMEM sret.value = %ld\n",sret.value);
-	printf("1.) SBI_EXT_MPXY_SET_SHMEM sret.error = %ld\n",sret.error);
+	report(!ret.error, "Set shared memory for MPXY");
+	if (ret.error) {
+		report_fail("Failed to set shared memory for MPXY (error=%ld)", ret.error);
+		report_prefix_pop();
+		return;
+	}
 
 
 	// 2. SBI_EXT_MPXY_GET_CHANNEL_IDS (get channel count)
