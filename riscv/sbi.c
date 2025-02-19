@@ -1438,13 +1438,14 @@ static void check_susp(void)
 
 	report_prefix_pop();
 }
-struct sbi_rpxy g_rpxy;
+
 static void check_mpxy(void)
 {
-	printf("Test 05\n");
+	printf("Test 06\n");
 	struct sbiret ret;
 	u32 *channel_ids = NULL;
 	long expected;
+	struct sbi_mpxy mpxy;
 
 	report_prefix_push("mpxy");
 
@@ -1455,12 +1456,12 @@ static void check_mpxy(void)
 	}
 
 	// 1. SBI_EXT_MPXY_SET_SHMEM
-	g_rpxy.shmem = memalign(SHMEM_PAGE_SIZE, SHMEM_PAGE_SIZE);
-	g_rpxy.shmem_phys = virt_to_phys(g_rpxy.shmem);
-	g_rpxy.active = true;
+	mpxy.shmem = memalign(MPXY_SHMEM_SIZE, MPXY_SHMEM_SIZE);
+	mpxy.shmem_phys = virt_to_phys(mpxy.shmem);
+	mpxy.active = true;
 
 	ret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_SET_SHMEM,
-		SHMEM_PAGE_SIZE, g_rpxy.shmem_phys, 0, 0, 0, 0);
+		MPXY_SHMEM_SIZE, mpxy.shmem_phys, 0, 0, 0, 0);
 
 	report(!ret.error, "Set shared memory for MPXY");
 	if (ret.error) {
@@ -1470,7 +1471,7 @@ static void check_mpxy(void)
 	}
 
 	// 2. SBI_EXT_MPXY_GET_CHANNEL_IDS (get channel count)
-	struct sbi_mpxy_channel_ids_data *sdata = g_rpxy.shmem;
+	struct sbi_mpxy_channel_ids_data *sdata = mpxy.shmem;
 	ret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_GET_CHANNEL_IDS,
 			0, 0, 0, 0, 0, 0);
 	if (ret.error) {
@@ -1487,7 +1488,7 @@ static void check_mpxy(void)
 		channel_ids = (u32*)malloc(channel_count * sizeof(u32));
 
 		if (channel_ids == 0) {
-			report_info("Memory not allocated.");
+			report_info("Memory not allocated");
 			goto mpxy_cleanup;
 		}
 
@@ -1507,13 +1508,13 @@ static void check_mpxy(void)
 					channel_ids[cidx] = sdata->channel_array[sidx];
 					snprintf(env_channel_name, sizeof(env_channel_name), "%s%u", "MPXY_CHANNEL_ID_", cidx);
 					if (env_or_skip(env_channel_name)) {
-						long expected = (long)strtoul(getenv(env_channel_name), NULL, 0);
+						expected = (long)strtoul(getenv(env_channel_name), NULL, 0);
 						report(channel_ids[cidx] == (u32)expected, "Channel ID %u matches expected value %lu", cidx, expected);
 						if (channel_ids[cidx] != (u32)expected) {
 							report_info("Expected %lu, but got %u for channel ID %u", expected, channel_ids[cidx], cidx);
 						}
 					}
-					report_info("channel_ids[%u]  = %u", cidx, channel_ids[cidx]);
+					report_info("MPXY channel_ids[%u]  = %u", cidx, channel_ids[cidx]);
 					cidx += 1;
 				}
 
