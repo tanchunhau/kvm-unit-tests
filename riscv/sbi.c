@@ -1443,6 +1443,7 @@ static void check_mpxy(void)
 {
 	printf("Test 03\n");
 	struct sbiret ret;
+	struct sbiret sret;
 	long expected;
 
 	report_prefix_push("mpxy");
