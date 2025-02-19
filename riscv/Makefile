@@ -45,7 +45,6 @@ ifeq ($(ARCH),riscv32)
 cflatobjs += lib/ldiv32.o
 endif
 cflatobjs += riscv/sbi-asm.o
-cflatobjs += riscv/mpxy/clock.o
 
 ########################################
 
