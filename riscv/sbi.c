@@ -4,9 +4,10 @@
  *
  * Copyright (C) 2023, Ventana Micro Systems Inc., Andrew Jones <ajones@ventanamicro.com>
  */
-#include <libcflat.h>
+#include <alloc.h>
 #include <alloc_page.h>
 #include <cpumask.h>
+#include <libcflat.h>
 #include <limits.h>
 #include <memregions.h>
 #include <on-cpus.h>
@@ -29,6 +30,7 @@
 #include <asm/timer.h>
 
 #include "sbi-tests.h"
+#include "mpxy.h"
 
 #define	HIGH_ADDR_BOUNDARY	((phys_addr_t)1 << 32)
 
@@ -1437,6 +1439,98 @@ static void check_susp(void)
 	report_prefix_pop();
 }
 
+static void check_mpxy(void)
+{
+	struct sbiret ret;
+	struct sbi_mpxy mpxy;
+	u32 *channel_ids = NULL;
+	long expected;
+
+	report_prefix_push("mpxy");
+
+	if (!sbi_probe(SBI_EXT_MPXY)) {
+		report_skip("MPXY extension not available");
+		goto mpxy_cleanup;
+	}
+
+	/* SBI_EXT_MPXY_SET_SHMEM */
+	mpxy.shmem = memalign(MPXY_SHMEM_SIZE, MPXY_SHMEM_SIZE);
+	mpxy.shmem_phys = virt_to_phys(mpxy.shmem);
+	mpxy.active = true;
+
+	ret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_SET_SHMEM,
+		MPXY_SHMEM_SIZE, mpxy.shmem_phys, 0, 0, 0, 0);
+
+	report(!ret.error, "Set shared memory for MPXY");
+	if (ret.error) {
+		report_fail("Failed to set shared memory for MPXY (error=%ld)", ret.error);
+		report_prefix_pop();
+		goto mpxy_cleanup;
+	}
+
+	/* SBI_EXT_MPXY_GET_CHANNEL_IDS (get channel count & id) */
+	struct sbi_mpxy_channel_ids_data *sdata = mpxy.shmem;
+	ret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_GET_CHANNEL_IDS,
+			0, 0, 0, 0, 0, 0);
+	if (ret.error) {
+		report_fail("Failed to get channel IDs for MPXY (error=%ld)", ret.error);
+		goto mpxy_cleanup;
+	}
+
+	report_pass("Successfully retrieved channel IDs");
+	u32 channel_count = sdata->returned + sdata->remaining;
+	if (env_or_skip("MPXY_CHANNEL_COUNT")) {
+		expected = (long)strtoul(getenv("MPXY_CHANNEL_COUNT"), NULL, 0);
+		gen_report(&ret, 0, expected);
+	}
+
+	report_info("MPXY channel count = %u", channel_count);
+
+	channel_ids = (u32*)malloc(channel_count * sizeof(u32));
+
+	if (channel_ids == 0) {
+		report_info("Memory not allocated");
+		goto mpxy_cleanup;
+	}
+
+	u32 remaining, returned, sidx, start_index = 0, cidx = 0;
+	do {
+		ret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_GET_CHANNEL_IDS,
+			start_index, 0, 0, 0, 0, 0);
+
+		if (ret.error) {
+			report_fail("Failed to get channel IDs for MPXY (error=%ld)", ret.error);
+			goto mpxy_cleanup;
+		}
+
+		char env_channel_name[32];
+		remaining = sdata->remaining;
+		returned = sdata->returned;
+		for (sidx = 0; sidx < returned && cidx < channel_count; sidx++) {
+			channel_ids[cidx] = sdata->channel_array[sidx];
+			snprintf(env_channel_name, sizeof(env_channel_name), "%s%u", "MPXY_CHANNEL_ID_", cidx);
+			if (env_or_skip(env_channel_name)) {
+				expected = (long)strtoul(getenv(env_channel_name), NULL, 0);
+				report(channel_ids[cidx] == (u32)expected, "Channel ID %u matches expected value %lu", cidx, expected);
+				if (channel_ids[cidx] != (u32)expected) {
+					report_info("Expected %lu, but got %u for channel ID %u", expected, channel_ids[cidx], cidx);
+				}
+			}
+			report_info("MPXY channel_ids[%u]  = %u", cidx, channel_ids[cidx]);
+			cidx += 1;
+		}
+		start_index = cidx;
+
+	} while (remaining);
+
+mpxy_cleanup:
+	if (channel_ids) {
+		free(channel_ids);
+	}
+
+	report_prefix_pop();
+}
+
 int main(int argc, char **argv)
 {
 	if (argc > 1 && !strcmp(argv[1], "-h")) {
@@ -1445,6 +1539,8 @@ int main(int argc, char **argv)
 	}
 
 	report_prefix_push("sbi");
+	check_mpxy(); // TODO: dont put as first test
+
 	check_base();
 	check_time();
 	check_ipi();
