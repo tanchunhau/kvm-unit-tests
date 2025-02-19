@@ -1485,7 +1485,7 @@ static void check_mpxy(void)
 			gen_report(&ret, 0, expected);
 		}
 
-		channel_ids = (int*)malloc(channel_count * sizeof(u32));
+		channel_ids = (u32*)malloc(channel_count * sizeof(u32));
 
 		if (channel_ids == 0) {
 			printf("Memory not allocated.\n");
