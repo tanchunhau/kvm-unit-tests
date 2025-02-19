@@ -1441,9 +1441,9 @@ static void check_susp(void)
 struct sbi_rpxy g_rpxy;
 static void check_mpxy(void)
 {
-	printf("Test 03\n");
+	printf("Test 05\n");
 	struct sbiret ret;
-	struct sbiret sret;
+	u32 *channel_ids = NULL;
 	long expected;
 
 	report_prefix_push("mpxy");
@@ -1466,13 +1466,11 @@ static void check_mpxy(void)
 	if (ret.error) {
 		report_fail("Failed to set shared memory for MPXY (error=%ld)", ret.error);
 		report_prefix_pop();
-		return;
+		goto mpxy_cleanup;
 	}
-
 
 	// 2. SBI_EXT_MPXY_GET_CHANNEL_IDS (get channel count)
 	struct sbi_mpxy_channel_ids_data *sdata = g_rpxy.shmem;
-	u32 *channel_ids = 0;
 	ret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_GET_CHANNEL_IDS,
 			0, 0, 0, 0, 0, 0);
 	if (ret.error) {
@@ -1484,13 +1482,13 @@ static void check_mpxy(void)
 			expected = (long)strtoul(getenv("MPXY_CHANNEL_COUNT"), NULL, 0);
 			gen_report(&ret, 0, expected);
 		}
-		report_info("MPXY channel count = %u\n", channel_count);
+		report_info("MPXY channel count = %u", channel_count);
 
 		channel_ids = (u32*)malloc(channel_count * sizeof(u32));
 
 		if (channel_ids == 0) {
-			report_info("Memory not allocated.\n");
-			// TODO: do something
+			report_info("Memory not allocated.");
+			goto mpxy_cleanup;
 		}
 
 		u32 remaining, returned, sidx, start_index = 0, cidx = 0;
@@ -1500,6 +1498,7 @@ static void check_mpxy(void)
 
 			if (ret.error) {
 				report_fail("Failed to get channel IDs for MPXY (error=%ld)", ret.error);
+				goto mpxy_cleanup;
 			} else {
 				char env_channel_name[32];
 				remaining = sdata->remaining;
@@ -1514,7 +1513,7 @@ static void check_mpxy(void)
 							report_info("Expected %lu, but got %u for channel ID %u", expected, channel_ids[cidx], cidx);
 						}
 					}
-					report_info("channel_ids[%u]  = %u\n", cidx, channel_ids[cidx]);
+					report_info("channel_ids[%u]  = %u", cidx, channel_ids[cidx]);
 					cidx += 1;
 				}
 
@@ -1524,18 +1523,12 @@ static void check_mpxy(void)
 		} while (remaining);
  	}
 
-	// 4.) SBI_EXT_MPXY_READ_ATTRS
-	u32 attr_count = sizeof(struct sbi_mpxy_channel_attrs) / sizeof(u32);
-	sret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_READ_ATTRS,
-		channel_ids[0], SBI_MPXY_ATTR_MSG_PROT_ID, attr_count, 0, 0, 0);
-
-	printf("4.) SBI_EXT_MPXY_READ_ATTRS sret.error = %ld\n",sret.error);
-	if (!sret.error) {
-		//for (int i = 0; i < attr_count; i++)
-			//attrs_buf[i] = le32_to_cpu(((__le32 *)mpxy->shmem)[i]);
+mpxy_cleanup:
+	if (channel_ids) {
+		free(channel_ids);
 	}
 
-	//check_mpxy_clock();
+	report_prefix_pop();
 }
 
 int main(int argc, char **argv)
@@ -1547,15 +1540,13 @@ int main(int argc, char **argv)
 
 	report_prefix_push("sbi");
 	check_mpxy();
-	if (true) {
-		check_base();
-		check_time();
-		check_ipi();
-		check_hsm();
-		check_dbcn();
-		check_susp();
-	}
 
+	check_base();
+	check_time();
+	check_ipi();
+	check_hsm();
+	check_dbcn();
+	check_susp();
 
 	return report_summary();
 }
