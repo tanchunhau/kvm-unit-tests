@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: GPL-2.0-only */
 
-// Temperorary put at this mpxy.h first
+// Temperorary declare at this file (mpxy.h) , will move to a suitable header file later.
 
 #define SBI_EXT_MPXY			0x4D505859
 /* SBI function IDs for MPXY extension */
