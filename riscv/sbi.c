@@ -1484,30 +1484,43 @@ static void check_mpxy(void)
 			expected = (long)strtoul(getenv("MPXY_CHANNEL_COUNT"), NULL, 0);
 			gen_report(&ret, 0, expected);
 		}
+		report_info("MPXY channel count = %u\n", channel_count);
 
 		channel_ids = (u32*)malloc(channel_count * sizeof(u32));
 
 		if (channel_ids == 0) {
-			printf("Memory not allocated.\n");
+			report_info("Memory not allocated.\n");
 			// TODO: do something
 		}
 
 		u32 remaining, returned, sidx, start_index = 0, cidx = 0;
 		do {
-			sret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_GET_CHANNEL_IDS,
+			ret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_GET_CHANNEL_IDS,
 				start_index, 0, 0, 0, 0, 0);
-			printf("3.) SBI_EXT_MPXY_GET_CHANNEL_IDS sret.error = %ld\n",sret.error);
-			if (sret.error) {break;}
-			remaining = sdata->remaining;
-			returned = sdata->returned;
 
-			for (sidx = 0; sidx < returned && cidx < channel_count; sidx++) {
-				channel_ids[cidx] = sdata->channel_array[sidx];
-				printf("channel_ids[%u] = %u\n", cidx, channel_ids[cidx]);
-				cidx += 1;
+			if (ret.error) {
+				report_fail("Failed to get channel IDs for MPXY (error=%ld)", ret.error);
+			} else {
+				char env_channel_name[32];
+				remaining = sdata->remaining;
+				returned = sdata->returned;
+				for (sidx = 0; sidx < returned && cidx < channel_count; sidx++) {
+					channel_ids[cidx] = sdata->channel_array[sidx];
+					snprintf(env_channel_name, sizeof(env_channel_name), "%s%u", "MPXY_CHANNEL_ID_", cidx);
+					if (env_or_skip(env_channel_name)) {
+						long expected = (long)strtoul(getenv(env_channel_name), NULL, 0);
+						report(channel_ids[cidx] == (u32)expected, "Channel ID %u matches expected value %lu", cidx, expected);
+						if (channel_ids[cidx] != (u32)expected) {
+							report_info("Expected %lu, but got %u for channel ID %u", expected, channel_ids[cidx], cidx);
+						}
+					}
+					report_info("channel_ids[%u]  = %u\n", cidx, channel_ids[cidx]);
+					cidx += 1;
+				}
+
+				start_index = cidx;
 			}
 
-			start_index = cidx;
 		} while (remaining);
  	}
 
