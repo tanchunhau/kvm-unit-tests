@@ -18,6 +18,16 @@
 #define SBI_EXT_MPXY_SEND_MSG_NO_RESP		0x5
 #define SBI_EXT_MPXY_GET_NOTIFICATION_EVENTS	0x6
 
+/* SBI MPXY MSI related channel attributes */
+struct sbi_mpxy_msi_info {
+	/* Lower 32-bits of the MSI target address */
+	u32 msi_addr_lo;
+	/* Upper 32-bits of the MSI target address */
+	u32 msi_addr_hi;
+	/* MSI data value */
+	u32 msi_data;
+};
+
 struct sbi_mpxy_channel_attrs {
 	/* Message protocol ID */
 	u32 msg_proto_id;
