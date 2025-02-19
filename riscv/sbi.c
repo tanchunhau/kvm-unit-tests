@@ -1444,7 +1444,7 @@ static void check_mpxy(void)
 	printf("Test 03\n");
 	struct sbiret ret;
 	struct sbiret sret;
-	//long expected;
+	long expected;
 
 	report_prefix_push("mpxy");
 
@@ -1455,7 +1455,7 @@ static void check_mpxy(void)
 	}
 
 	// 1. SBI_EXT_MPXY_SET_SHMEM
-	g_rpxy.shmem = alloc_page(); //memalign(SHMEM_PAGE_SIZE, SHMEM_PAGE_SIZE);
+	g_rpxy.shmem = memalign(SHMEM_PAGE_SIZE, SHMEM_PAGE_SIZE);
 	g_rpxy.shmem_phys = virt_to_phys(g_rpxy.shmem);
 	g_rpxy.active = true;
 
@@ -1472,32 +1472,44 @@ static void check_mpxy(void)
 
 	// 2. SBI_EXT_MPXY_GET_CHANNEL_IDS (get channel count)
 	struct sbi_mpxy_channel_ids_data *sdata = g_rpxy.shmem;
-
-	sret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_GET_CHANNEL_IDS,
+	u32 *channel_ids = 0;
+	ret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_GET_CHANNEL_IDS,
 			0, 0, 0, 0, 0, 0);
-	printf("2.) SBI_EXT_MPXY_GET_CHANNEL_IDS sret.error = %ld\n",sret.error);
-	u32 channel_count = sdata->remaining + sdata->returned;
-	printf("total channel count = %u\n", channel_count);
-
-	// 3. SBI_EXT_MPXY_GET_CHANNEL_IDS (get channel ids)
-	u32 channel_ids[100];
-	u32 remaining, returned, sidx, start_index = 0, cidx = 0;
-	do {
-		sret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_GET_CHANNEL_IDS,
-			start_index, 0, 0, 0, 0, 0);
-		printf("3.) SBI_EXT_MPXY_GET_CHANNEL_IDS sret.error = %ld\n",sret.error);
-		if (sret.error) {break;}
-		remaining = sdata->remaining;
-		returned = sdata->returned;
-
-		for (sidx = 0; sidx < returned && cidx < channel_count; sidx++) {
-			channel_ids[cidx] = sdata->channel_array[sidx];
-			printf("channel_ids[%u] = %u\n", cidx, channel_ids[cidx]);
-			cidx += 1;
+	if (ret.error) {
+		report_fail("Failed to get channel IDs for MPXY (error=%ld)", ret.error);
+	} else {
+		report_pass("Successfully retrieved channel IDs");
+		u32 channel_count = sdata->returned + sdata->remaining;
+		if (env_or_skip("MPXY_CHANNEL_COUNT")) {
+			expected = (long)strtoul(getenv("MPXY_CHANNEL_COUNT"), NULL, 0);
+			gen_report(&ret, 0, expected);
 		}
 
-		start_index = cidx;
-	} while (remaining);
+		channel_ids = (int*)malloc(channel_count * sizeof(u32));
+
+		if (channel_ids == 0) {
+			printf("Memory not allocated.\n");
+			// TODO: do something
+		}
+
+		u32 remaining, returned, sidx, start_index = 0, cidx = 0;
+		do {
+			sret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_GET_CHANNEL_IDS,
+				start_index, 0, 0, 0, 0, 0);
+			printf("3.) SBI_EXT_MPXY_GET_CHANNEL_IDS sret.error = %ld\n",sret.error);
+			if (sret.error) {break;}
+			remaining = sdata->remaining;
+			returned = sdata->returned;
+
+			for (sidx = 0; sidx < returned && cidx < channel_count; sidx++) {
+				channel_ids[cidx] = sdata->channel_array[sidx];
+				printf("channel_ids[%u] = %u\n", cidx, channel_ids[cidx]);
+				cidx += 1;
+			}
+
+			start_index = cidx;
+		} while (remaining);
+ 	}
 
 	// 4.) SBI_EXT_MPXY_READ_ATTRS
 	u32 attr_count = sizeof(struct sbi_mpxy_channel_attrs) / sizeof(u32);
