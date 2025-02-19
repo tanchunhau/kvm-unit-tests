@@ -1484,7 +1484,16 @@ static void check_mpxy(void)
 		start_index = cidx;
 	} while (remaining);
 
+	// 4.) SBI_EXT_MPXY_READ_ATTRS
+	u32 attr_count = sizeof(struct sbi_mpxy_channel_attrs) / sizeof(u32);
+	sret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_READ_ATTRS,
+		channel_ids[0], SBI_MPXY_ATTR_MSG_PROT_ID, attr_count, 0, 0, 0);
 
+	printf("4.) SBI_EXT_MPXY_READ_ATTRS sret.error = %ld\n",sret.error);
+	if (!sret.error) {
+		for (int i = 0; i < attr_count; i++)
+			//attrs_buf[i] = le32_to_cpu(((__le32 *)mpxy->shmem)[i]);
+	}
 
 	//check_mpxy_clock();
 }
@@ -1498,7 +1507,7 @@ int main(int argc, char **argv)
 
 	report_prefix_push("sbi");
 	check_mpxy();
-	if (false) {
+	if (true) {
 		check_base();
 		check_time();
 		check_ipi();
