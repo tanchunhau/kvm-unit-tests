@@ -1484,7 +1484,7 @@ static void check_mpxy(void)
 		gen_report(&ret, 0, expected);
 	}
 
-	report_info("MPXY channel count = %u", channel_count);
+	report_info("Readed MPXY channel count = %u", channel_count);
 
 	channel_ids = (u32*)malloc(channel_count * sizeof(u32));
 
@@ -1512,16 +1512,17 @@ static void check_mpxy(void)
 			if (env_or_skip(env_channel_name)) {
 				expected = (long)strtoul(getenv(env_channel_name), NULL, 0);
 				report(channel_ids[cidx] == (u32)expected, "Channel ID %u matches expected value %lu", cidx, expected);
-				if (channel_ids[cidx] != (u32)expected) {
-					report_info("Expected %lu, but got %u for channel ID %u", expected, channel_ids[cidx], cidx);
-				}
 			}
-			report_info("MPXY channel_ids[%u]  = %u", cidx, channel_ids[cidx]);
+			report_info("Readed MPXY channel_ids[%u] = %u", cidx, channel_ids[cidx]);
 			cidx += 1;
 		}
 		start_index = cidx;
 
 	} while (remaining);
+
+	//Trial clock:
+	struct rpmi_mbox_message msg;
+	rpmi_mbox_init_get_attribute(&msg, RPMI_MBOX_ATTR_SPEC_VERSION);
 
 mpxy_cleanup:
 	if (channel_ids) {
