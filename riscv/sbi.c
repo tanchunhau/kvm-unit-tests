@@ -1556,10 +1556,10 @@ static void check_mpxy(void)
 
 	for (int i = 0 ; i < 12; i++) {
 		ret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_READ_ATTRS,
-			channel_ids[0], params[0], 1, 0, 0, 0);
+			channel_ids[0], params[i], 1, 0, 0, 0);
 
 		if (!ret.error) {
-			printf("%s = %u\n", paramsc[0], ((u32*)mpxy.shmem)[0]);
+			printf("%s = %u\n", paramsc[i], ((u32*)mpxy.shmem)[0]);
 		}
 	}
 
