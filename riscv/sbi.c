@@ -1521,15 +1521,48 @@ static void check_mpxy(void)
 	} while (remaining);
 
 	//Trial clock:
-	struct rpmi_mbox_message msg;
-	rpmi_mbox_init_get_attribute(&msg, SBI_MPXY_ATTR_MSGPROTO_ATTR_START);
+	//struct rpmi_mbox_message msg;
+	//rpmi_mbox_init_get_attribute(&msg, SBI_MPXY_ATTR_MSGPROTO_ATTR_START);
 
-	ret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_READ_ATTRS,
-		channel_ids[0], SBI_MPXY_ATTR_MSG_PROT_ID, 1, 0, 0, 0);
+	unsigned long params[12] = {
+		SBI_MPXY_ATTR_MSG_PROT_ID,
+		SBI_MPXY_ATTR_MSG_PROT_VER,
+		SBI_MPXY_ATTR_MSG_MAX_LEN,
+		SBI_MPXY_ATTR_MSG_SEND_TIMEOUT,
+		SBI_MPXY_ATTR_MSG_COMPLETION_TIMEOUT,
+		SBI_MPXY_ATTR_CHANNEL_CAPABILITY,
+		SBI_MPXY_ATTR_SSE_EVENT_ID,
+		SBI_MPXY_ATTR_MSI_CONTROL,
+		SBI_MPXY_ATTR_MSI_ADDR_LO,
+		SBI_MPXY_ATTR_MSI_ADDR_HI,
+		SBI_MPXY_ATTR_MSI_DATA,
+		SBI_MPXY_ATTR_EVENTS_STATE_CONTROL,
+	};
 
-	if (!ret.error) {
-		printf("SBI_MPXY_ATTR_MSG_PROT_ID = %u\n", ((u32*)mpxy.shmem)[0]);
+	unsigned long paramsc[12] = {
+		"SBI_MPXY_ATTR_MSG_PROT_ID",
+		"SBI_MPXY_ATTR_MSG_PROT_VER",
+		"SBI_MPXY_ATTR_MSG_MAX_LEN",
+		"SBI_MPXY_ATTR_MSG_SEND_TIMEOUT",
+		"SBI_MPXY_ATTR_MSG_COMPLETION_TIMEOUT",
+		"SBI_MPXY_ATTR_CHANNEL_CAPABILITY",
+		"SBI_MPXY_ATTR_SSE_EVENT_ID",
+		"SBI_MPXY_ATTR_MSI_CONTROL",
+		"SBI_MPXY_ATTR_MSI_ADDR_LO",
+		"SBI_MPXY_ATTR_MSI_ADDR_HI",
+		"SBI_MPXY_ATTR_MSI_DATA",
+		"SBI_MPXY_ATTR_EVENTS_STATE_CONTROL",
+	};
+
+	for (int i = 0 ; i < 12; i++) {
+		ret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_READ_ATTRS,
+			channel_ids[0], params[0], 1, 0, 0, 0);
+
+		if (!ret.error) {
+			printf("%s = %u\n", paramsc[0], ((u32*)mpxy.shmem)[0]);
+		}
 	}
+
 
 mpxy_cleanup:
 	if (channel_ids) {
