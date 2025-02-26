@@ -1539,7 +1539,7 @@ static void check_mpxy(void)
 		SBI_MPXY_ATTR_EVENTS_STATE_CONTROL,
 	};
 
-	unsigned long paramsc[12] = {
+	unsigned char* paramsc[12] = {
 		"SBI_MPXY_ATTR_MSG_PROT_ID",
 		"SBI_MPXY_ATTR_MSG_PROT_VER",
 		"SBI_MPXY_ATTR_MSG_MAX_LEN",
