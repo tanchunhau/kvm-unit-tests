@@ -1554,13 +1554,16 @@ static void check_mpxy(void)
 		"SBI_MPXY_ATTR_EVENTS_STATE_CONTROL",
 	};
 
-	for (int i = 0 ; i < 12; i++) {
-		ret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_READ_ATTRS,
-			channel_ids[0], params[i], 1, 0, 0, 0);
+	for (u32 i = 0 ; i < channel_count; i++) {
+		for (u32 j = 0 ; j < 12; j++) {
+			ret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_READ_ATTRS,
+				channel_ids[i], params[j], 1, 0, 0, 0);
 
-		if (!ret.error) {
-			printf("%s = %u\n", paramsc[i], ((u32*)mpxy.shmem)[0]);
+			if (!ret.error) {
+				printf("%s = %u\n", paramsc[j], ((u32*)mpxy.shmem)[0]);
+			}
 		}
+		printf("\n");
 	}
 
 
