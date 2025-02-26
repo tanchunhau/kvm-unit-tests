@@ -1522,7 +1522,24 @@ static void check_mpxy(void)
 
 	//Trial clock:
 	struct rpmi_mbox_message msg;
-	rpmi_mbox_init_get_attribute(&msg, RPMI_MBOX_ATTR_SPEC_VERSION);
+	rpmi_mbox_init_get_attribute(&msg, SBI_MPXY_ATTR_MSGPROTO_ATTR_START);
+
+	u32 attr_count = sizeof(struct sbi_mpxy_rpmi_channel_attrs) / sizeof(u32);
+	ret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_READ_ATTRS,
+		channel_ids[0], SBI_MPXY_ATTR_MSGPROTO_ATTR_START, attr_count, 0, 0, 0);
+
+	if (!ret.error) {
+			for (int i = 0; i < attr_count; i++) {
+				if (i == 0) {
+					printf("servicegroup_id = %u\n", ((u32*)mpxy.shmem)[i]);
+				}
+				else if (i == 1) {
+					printf("servicegroup_version = %u\n", ((u32*)mpxy.shmem)[i]);
+				} else {
+					printf("others\n");
+				}
+			}
+	}
 
 mpxy_cleanup:
 	if (channel_ids) {

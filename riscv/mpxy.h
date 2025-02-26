@@ -138,3 +138,10 @@ static inline void rpmi_mbox_init_get_attribute(struct rpmi_mbox_message *msg,
 	msg->attr.value = 0;
 	msg->error = 0;
 }
+
+struct sbi_mpxy_rpmi_channel_attrs {
+	/* RPMI service group ID */
+	u32 servicegroup_id;
+	/* RPMI service group version */
+	u32 servicegroup_version;
+};
