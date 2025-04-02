@@ -1553,6 +1553,12 @@ static void check_mpxy(void)
 		"SBI_MPXY_ATTR_MSI_DATA",
 		"SBI_MPXY_ATTR_EVENTS_STATE_CONTROL",
 	};
+
+	const char* paramsc1[2] = {
+		"servicegroup_id",
+		"servicegroup_version",
+	};
+
 	struct sbi_mpxy_channel_attrs attrs;
 	struct sbi_mpxy_rpmi_channel_attrs rpmi_attrs;
 	for (u32 i = 0; i < channel_count; i++) {
@@ -1573,8 +1579,8 @@ static void check_mpxy(void)
 				ret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_READ_ATTRS,
 					channel_ids[i], SBI_MPXY_ATTR_MSGPROTO_ATTR_START, rpmi_attr_count, 0, 0, 0);
 				if (!ret.error) {
-					for (u32 k = 0; k < attr_count; k++) {
-							printf("A_%s (%u) = %u\n", paramsc[j], k, ((u32*)mpxy.shmem)[k]);
+					for (u32 k = 0; k < rpmi_attr_count; k++) {
+							printf("%s (%u) = %u\n", paramsc1[j], k, ((u32*)mpxy.shmem)[k]);
 					}
 				}
 
