@@ -1557,12 +1557,23 @@ static void check_mpxy(void)
 	for (u32 i = 0; i < channel_count; i++) {
 		printf("Yo channel_ids[%u] = %u\n", i , channel_ids[i]);
 		for (u32 j = 0 ; j < 12; j++) {
-			ret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_READ_ATTRS,
-				channel_ids[i], params[j], 1, 0, 0, 0);
 
-			if (!ret.error) {
-				printf("%s = %u\n", paramsc[j], ((u32*)mpxy.shmem)[0]);
+			if (j == 0) {
+				ret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_READ_ATTRS,
+					channel_ids[i], params[j], 2, 0, 0, 0);
+				if (!ret.error) {
+					printf("%s (0) = %u\n", paramsc[j], ((u32*)mpxy.shmem)[0]);
+					printf("%s (1) = %u\n", paramsc[j], ((u32*)mpxy.shmem)[1]);
+				}
+			} else {
+				ret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_READ_ATTRS,
+					channel_ids[i], params[j], 1, 0, 0, 0);
+
+				if (!ret.error) {
+					printf("%s = %u\n", paramsc[j], ((u32*)mpxy.shmem)[0]);
+				}
 			}
+
 		}
 		printf("\n");
 	}
