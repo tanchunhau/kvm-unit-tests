@@ -1554,7 +1554,8 @@ static void check_mpxy(void)
 		"SBI_MPXY_ATTR_EVENTS_STATE_CONTROL",
 	};
 
-	for (u32 i = 0 ; i < channel_count; i++) {
+	for (u32 i = 0; i < channel_count; i++) {
+		printf("Yo channel_ids[%u] = %u\n", i , channel_ids[i]);
 		for (u32 j = 0 ; j < 12; j++) {
 			ret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_READ_ATTRS,
 				channel_ids[i], params[j], 1, 0, 0, 0);
