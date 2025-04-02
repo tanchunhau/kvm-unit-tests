@@ -1580,7 +1580,7 @@ static void check_mpxy(void)
 					channel_ids[i], SBI_MPXY_ATTR_MSGPROTO_ATTR_START, rpmi_attr_count, 0, 0, 0);
 				if (!ret.error) {
 					for (u32 k = 0; k < rpmi_attr_count; k++) {
-							printf("%s (%u) = %u\n", paramsc1[j], k, ((u32*)mpxy.shmem)[k]);
+							printf("%s (%u) = %u\n", paramsc1[k], k, ((u32*)mpxy.shmem)[k]);
 					}
 				}
 
