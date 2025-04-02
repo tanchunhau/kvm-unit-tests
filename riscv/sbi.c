@@ -1554,6 +1554,7 @@ static void check_mpxy(void)
 		"SBI_MPXY_ATTR_EVENTS_STATE_CONTROL",
 	};
 	struct sbi_mpxy_channel_attrs attrs;
+	struct sbi_mpxy_rpmi_channel_attrs rpmi_attrs;
 	for (u32 i = 0; i < channel_count; i++) {
 		printf("Yo channel_ids[%u] = %u\n", i , channel_ids[i]);
 		for (u32 j = 0 ; j < 12; j++) {
@@ -1567,6 +1568,17 @@ static void check_mpxy(void)
 						printf("%s (%u) = %u\n", paramsc[j], k, ((u32*)mpxy.shmem)[k]);
 					}
 				}
+
+				u32 rpmi_attr_count = sizeof(rpmi_attrs) / sizeof(u32);
+				ret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_READ_ATTRS,
+					channel_ids[i], SBI_MPXY_ATTR_MSGPROTO_ATTR_START, rpmi_attr_count, 0, 0, 0);
+				if (!ret.error) {
+					for (u32 k = 0; k < attr_count; k++) {
+							printf("A_%s (%u) = %u\n", paramsc[j], k, ((u32*)mpxy.shmem)[k]);
+					}
+				}
+
+
 			} else {
 				ret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_READ_ATTRS,
 					channel_ids[i], params[j], 1, 0, 0, 0);
