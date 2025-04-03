@@ -1604,7 +1604,7 @@ static void check_mpxy(void)
 
 	if (!sret.error) {
 		rx_bytes = sret.value;
-		rx_bytes = min(sizeof(num_domain_rx), rx_bytes);
+		rx_bytes = MIN(sizeof(num_domain_rx), rx_bytes);
 		memcpy(&num_domain_rx, mpxy.shmem, rx_bytes);
 	}
 	printf("status = %d\n", num_domain_rx.status);
