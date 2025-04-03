@@ -1635,7 +1635,7 @@ static void check_mpxy(void)
 		printf("name[%u] = %s\n",i, pm_get_domain_attrs_rx.name);
 		printf("status = %d\n", pm_get_domain_attrs_rx.status);
 		printf("flags = %u\n", pm_get_domain_attrs_rx.flags);
-		printf("transition_latency = %u\n\n", pm_get_domain_attrs_rx.transition_latency);
+		printf("transition_latency = %u\n", pm_get_domain_attrs_rx.transition_latency);
 
 		// get state
 		pm_get_power_state_tx.domain_id = i;
@@ -1652,6 +1652,7 @@ static void check_mpxy(void)
 		}
 		printf("status = %d\n", pm_get_power_state_rx.status);
 		printf("flags = %u\n", pm_get_power_state_rx.power_state);
+		printf("\n");
 
 	}
 
