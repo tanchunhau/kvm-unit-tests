@@ -170,6 +170,36 @@ struct rpmi_pm_get_domain_attrs_tx {
 	u32 domain_id;
 };
 
+#define RPMI_PM_DOMAIN_NAME_LEN		16
+
+/* pm domain attributes response data */
+struct rpmi_pm_get_domain_attrs_rx {
+	s32 status;
+	u32 flags;
+	u32 transition_latency;
+	char name[RPMI_PM_DOMAIN_NAME_LEN];
+};
+
+/* Service: SET_POWER_DOMAIN_STATE */
+struct rpmi_pm_set_power_state_tx {
+	u32 domain_id;
+	u32 power_state;
+};
+
+struct rpmi_pm_set_power_state_rx {
+	s32 status;
+};
+
+/* Service: GET_POWER_DOMAIN_STATE */
+struct rpmi_pm_get_power_state_tx {
+	u32 domain_id;
+};
+
+struct rpmi_pm_get_power_state_rx {
+	s32 status;
+	u32 power_state;
+};
+
 /* RPMI Device Power Service IDs */
 enum rpmi_device_power_service_id {
 	RPMI_DP_SRV_ENABLE_NOTIFICATION = 0x01,

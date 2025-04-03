@@ -1594,6 +1594,8 @@ static void check_mpxy(void)
 	struct rpmi_pm_get_num_domain_rx num_domain_rx;
 	unsigned long rx_bytes;
 
+	struct rpmi_pm_get_domain_attrs_tx pm_get_domain_attrs_tx;
+
 	/* Message protocols allowed to have no data in messages */
 	//if (tx_len)
 	//	memcpy(mpxy->shmem, tx, tx_len);
@@ -1609,6 +1611,29 @@ static void check_mpxy(void)
 	}
 	printf("status = %d\n", num_domain_rx.status);
 	printf("num_domains = %u\n", num_domain_rx.num_domains);
+
+	struct rpmi_pm_get_domain_attrs_rx pm_get_domain_attrs_rx;
+
+	for (u32 i = 0; i < num_domain_rx.num_domains; i++) {
+		pm_get_domain_attrs_tx.domain_id = i;
+
+		/* Message protocols allowed to have no data in messages */
+		if (sizeof(pm_get_domain_attrs_tx))
+			memcpy(mpxy.shmem, &pm_get_domain_attrs_tx, sizeof(pm_get_domain_attrs_tx));
+
+		sret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_SEND_MSG_WITH_RESP,
+			channel_ids[0], RPMI_DP_SRV_GET_NUM_DOMAINS, sizeof(pm_get_domain_attrs_tx), 0, 0, 0);
+
+		if (!sret.error) {
+			rx_bytes = sret.value;
+			rx_bytes = MIN(sizeof(pm_get_domain_attrs_rx), rx_bytes);
+			memcpy(&pm_get_domain_attrs_rx, mpxy.shmem, rx_bytes);
+		}
+		printf("name[%u] = %s\n",i, pm_get_domain_attrs_rx.name);
+		printf("status = %d\n", pm_get_domain_attrs_rx.status);
+		printf("flags = %u\n", pm_get_domain_attrs_rx.flags);
+		printf("transition_latency = %u\n", pm_get_domain_attrs_rx.transition_latency);
+	}
 
 
 
