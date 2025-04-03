@@ -1650,7 +1650,7 @@ static void check_mpxy(void)
 			rx_bytes = MIN(sizeof(pm_get_power_state_rx), rx_bytes);
 			memcpy(&pm_get_power_state_rx, mpxy.shmem, rx_bytes);
 		}
-		printf("status = %d\n", pm_get_power_state_rx.status);
+		printf("get power status = %d\n", pm_get_power_state_rx.status);
 		printf("flags = %u\n", pm_get_power_state_rx.power_state);
 		printf("\n");
 
