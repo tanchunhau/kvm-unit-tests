@@ -1580,23 +1580,36 @@ static void check_mpxy(void)
 					channel_ids[i], SBI_MPXY_ATTR_MSGPROTO_ATTR_START, rpmi_attr_count, 0, 0, 0);
 				if (!ret.error) {
 					for (u32 k = 0; k < rpmi_attr_count; k++) {
-							printf("%s (%u) = %u\n", paramsc1[k], k, ((u32*)mpxy.shmem)[k]);
+						printf("%s (%u) = %u\n", paramsc1[k], k, ((u32*)mpxy.shmem)[k]);
 					}
 				}
 
 
-			} else {
-				ret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_READ_ATTRS,
-					channel_ids[i], params[j], 1, 0, 0, 0);
-
-				if (!ret.error) {
-					printf("%s = %u\n", paramsc[j], ((u32*)mpxy.shmem)[0]);
-				}
 			}
-
 		}
 		printf("\n");
 	}
+
+	struct sbiret sret;
+	struct rpmi_pm_get_num_domain_rx num_domain_rx;
+	unsigned long rx_bytes;
+
+	/* Message protocols allowed to have no data in messages */
+	//if (tx_len)
+	//	memcpy(mpxy->shmem, tx, tx_len);
+
+
+	sret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_SEND_MSG_WITH_RESP,
+		channel_ids[0], RPMI_DP_SRV_GET_NUM_DOMAINS, 0, 0, 0, 0);
+
+	if (!sret.error) {
+		rx_bytes = sret.value;
+		rx_bytes = min(sizeof(num_domain_rx), rx_bytes);
+		memcpy(&num_domain_rx, mpxy.shmem, rx_bytes);
+	}
+	printf("status = %d\n", num_domain_rx.status);
+	printf("num_domains = %u\n", num_domain_rx.num_domains);
+
 
 
 mpxy_cleanup:

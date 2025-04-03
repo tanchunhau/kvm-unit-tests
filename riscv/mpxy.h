@@ -158,3 +158,24 @@ struct sbi_mpxy_rpmi_channel_attrs {
 	/* RPMI service group version */
 	u32 servicegroup_version;
 };
+
+/* Service: GET_POWER_DOMAINS */
+struct rpmi_pm_get_num_domain_rx {
+	s32 status;
+	u32 num_domains;
+};
+
+/* Service: GET_POWER_DOMAIN_ATTRS */
+struct rpmi_pm_get_domain_attrs_tx {
+	u32 domain_id;
+};
+
+/* RPMI Device Power Service IDs */
+enum rpmi_device_power_service_id {
+	RPMI_DP_SRV_ENABLE_NOTIFICATION = 0x01,
+	RPMI_DP_SRV_GET_NUM_DOMAINS  = 0x02,
+	RPMI_DP_SRV_GET_ATTRS = 0x03,
+	RPMI_DP_SRV_SET_STATE = 0x04,
+	RPMI_DP_SRV_GET_STATE = 0x05,
+	RPMI_DP_SRV_ID_MAX_COUNT,
+};
