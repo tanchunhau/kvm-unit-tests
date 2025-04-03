@@ -1661,7 +1661,7 @@ static void check_mpxy(void)
 			memcpy(mpxy.shmem, &pm_set_power_state_tx, sizeof(pm_set_power_state_tx));
 
 		sret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_SEND_MSG_WITH_RESP,
-			channel_ids[0], RPMI_DP_SRV_GET_STATE, sizeof(pm_set_power_state_tx), 0, 0, 0);
+			channel_ids[0], RPMI_DP_SRV_SET_STATE, sizeof(pm_set_power_state_tx), 0, 0, 0);
 
 		if (!sret.error) {
 			rx_bytes = sret.value;
