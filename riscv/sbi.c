@@ -1653,7 +1653,6 @@ static void check_mpxy(void)
 		}
 		printf("*** get_power_state status = %d\n", pm_get_power_state_rx.status);
 		printf("power_state = %u\n", pm_get_power_state_rx.power_state);
-		printf("\n");
 
 		// set state
 		pm_set_power_state_tx.domain_id = i;
@@ -1670,7 +1669,6 @@ static void check_mpxy(void)
 			memcpy(&pm_set_power_state_rx, mpxy.shmem, rx_bytes);
 		}
 		printf("*** set_power_state status = %d\n", pm_set_power_state_rx.status);
-		printf("\n");
 
 		// get state
 		pm_get_power_state_tx.domain_id = i;
