@@ -1622,7 +1622,7 @@ static void check_mpxy(void)
 			memcpy(mpxy.shmem, &pm_get_domain_attrs_tx, sizeof(pm_get_domain_attrs_tx));
 
 		sret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_SEND_MSG_WITH_RESP,
-			channel_ids[0], RPMI_DP_SRV_GET_NUM_DOMAINS, sizeof(pm_get_domain_attrs_tx), 0, 0, 0);
+			channel_ids[0], RPMI_DP_SRV_GET_ATTRS, sizeof(pm_get_domain_attrs_tx), 0, 0, 0);
 
 		if (!sret.error) {
 			rx_bytes = sret.value;
