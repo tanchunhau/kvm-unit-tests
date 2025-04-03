@@ -1571,7 +1571,7 @@ static void check_mpxy(void)
 					channel_ids[i], params[j], attr_count, 0, 0, 0);
 				if (!ret.error) {
 					for (u32 k = 0; k < attr_count; k++) {
-						printf("%s (%u) = %u\n", paramsc[j], k, ((u32*)mpxy.shmem)[k]);
+						printf("%s (%u) = %u\n", paramsc[k], k, ((u32*)mpxy.shmem)[k]);
 					}
 				}
 
