@@ -1633,7 +1633,7 @@ static void check_mpxy(void)
 			memcpy(&pm_get_domain_attrs_rx, mpxy.shmem, rx_bytes);
 		}
 		printf("name[%u] = %s\n",i, pm_get_domain_attrs_rx.name);
-		printf("status = %d\n", pm_get_domain_attrs_rx.status);
+		printf("*** get_domain_attrs status = %d\n", pm_get_domain_attrs_rx.status);
 		printf("flags = %u\n", pm_get_domain_attrs_rx.flags);
 		printf("transition_latency = %u\n", pm_get_domain_attrs_rx.transition_latency);
 
@@ -1650,8 +1650,8 @@ static void check_mpxy(void)
 			rx_bytes = MIN(sizeof(pm_get_power_state_rx), rx_bytes);
 			memcpy(&pm_get_power_state_rx, mpxy.shmem, rx_bytes);
 		}
-		printf("get power status = %d\n", pm_get_power_state_rx.status);
-		printf("flags = %u\n", pm_get_power_state_rx.power_state);
+		printf("*** get_power_state status = %d\n", pm_get_power_state_rx.status);
+		printf("power_state = %u\n", pm_get_power_state_rx.power_state);
 		printf("\n");
 
 	}
