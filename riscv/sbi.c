@@ -1688,7 +1688,7 @@ static void check_mpxy(void)
 		printf("\n");
 
 	}
-
+	printf("yo TCH fdff ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ***\n");
 	run_device_power_test();
 
 
