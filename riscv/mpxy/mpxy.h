@@ -3,6 +3,7 @@
 // TODO: Temperorary declare at this file (mpxy.h) , will move to a suitable header file later.
 
 #include "testcase/device_power.h"
+#include <libcflat.h>
 
 #define SBI_EXT_MPXY			0x4D505859
 /* SBI function IDs for MPXY extension */
