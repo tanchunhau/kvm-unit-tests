@@ -30,7 +30,7 @@
 #include <asm/timer.h>
 
 #include "sbi-tests.h"
-#include "mpxy.h"
+#include "mpxy/mpxy.h"
 
 #define	HIGH_ADDR_BOUNDARY	((phys_addr_t)1 << 32)
 
@@ -1688,6 +1688,8 @@ static void check_mpxy(void)
 		printf("\n");
 
 	}
+
+	run_device_power_test();
 
 
 
