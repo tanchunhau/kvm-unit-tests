@@ -6,7 +6,7 @@
 
 int device_power_get_num_domains(struct sbi_mpxy* mpxy)
 {
-	printf("Test 01 - Get number of domains\n");
+	printf("--- Test 01 - Get number of domains\n");
 	int ret = MPXY_TEST_SUCCESS;
 	struct sbiret sret;
 	unsigned long rx_bytes;
@@ -22,32 +22,33 @@ int device_power_get_num_domains(struct sbi_mpxy* mpxy)
 
 		if (num_domain_rx.status != RPMI_SUCCESS)
 			ret = MPXY_TEST_FAIL;
-		else if (num_domain_rx.num_domains != expected_number_of_domains)
+		else if (num_domain_rx.num_domains != expected_number_of_domain)
 			ret = MPXY_TEST_FAIL;
 
 		printf("RPMI status = %s(%d)\n", getRPMIString(num_domain_rx.status), num_domain_rx.status);
 		printf("num_domains = %u, expected = %u\n",
-			num_domain_rx.num_domains, expected_number_of_domains);
+			num_domain_rx.num_domains, expected_number_of_domain);
 
 	} else {
+		printf("sbi ecall return error(%d)\n", sret.error);
 		ret = MPXY_TEST_FAIL;
 	}
 
-	printf("Test result : %s\n", (ret == MPXY_TEST_SUCCESS) ? "PASS" : "FAIL");
+	printf("--- Test result : %s\n", (ret == MPXY_TEST_SUCCESS) ? "PASS" : "FAIL");
 
 	return ret;
 }
 
 int device_power_get_num_attributes(struct sbi_mpxy* mpxy)
 {
-	printf("device_power_get_num_attributes\n");
+	printf("--- Test 02 - Get domain attributes\n");
 	int ret = MPXY_TEST_SUCCESS;
 	struct sbiret sret;
 	unsigned long rx_bytes;
 	struct rpmi_pm_get_domain_attrs_tx pm_get_domain_attrs_tx;
 	struct rpmi_pm_get_domain_attrs_rx pm_get_domain_attrs_rx;
 
-	for (u32 i = 0; i < expected_number_of_domains; i++) {
+	for (u32 i = 0; i < expected_number_of_domain; i++) {
 		pm_get_domain_attrs_tx.domain_id = i;
 
 		memcpy(mpxy->shmem, &pm_get_domain_attrs_tx, sizeof(pm_get_domain_attrs_tx));
@@ -59,12 +60,35 @@ int device_power_get_num_attributes(struct sbi_mpxy* mpxy)
 			rx_bytes = sret.value;
 			rx_bytes = MIN(sizeof(pm_get_domain_attrs_rx), rx_bytes);
 			memcpy(&pm_get_domain_attrs_rx, mpxy->shmem, rx_bytes);
+
+			if (pm_get_domain_attrs_rx.status != RPMI_SUCCESS)
+				ret = MPXY_TEST_FAIL;
+			else if (pm_get_domain_attrs_rx.name != expected_device_power_names[i])
+				ret = MPXY_TEST_FAIL;
+			else if (pm_get_domain_attrs_rx.transition_latency != expected_device_power_latencies[i])
+				ret = MPXY_TEST_FAIL;
+			else if (pm_get_domain_attrs_rx.flags != expected_device_power_flags[i])
+				ret = MPXY_TEST_FAIL;
+
+			printf("RPMI status[%u] = %s(%d)\n", i, getRPMIString(pm_get_domain_attrs_rx.status), pm_get_domain_attrs_rx.status);
+			printf("name[%u] = %u, expected = %u\n",
+				i, pm_get_domain_attrs_rx.name, expected_device_power_names[i]);
+			printf("transition latency[%u] = %u, expected = %u\n",
+				i, pm_get_domain_attrs_rx.transition_latency, expected_device_power_latencies[i]);
+			printf("flag[%u] = %u, expected = %u\n",
+				i, pm_get_domain_attrs_rx.flags, expected_device_power_flags[i]);
+		} else {
+			printf("sbi ecall[%u] return error(%d)\n", i,sret.error);
+			ret = MPXY_TEST_FAIL;
 		}
+
 		printf("name[%u] = %s\n",i, pm_get_domain_attrs_rx.name);
 		printf("*** get_domain_attrs status = %d\n", pm_get_domain_attrs_rx.status);
 		printf("flags = %u\n", pm_get_domain_attrs_rx.flags);
 		printf("transition_latency = %u\n", pm_get_domain_attrs_rx.transition_latency);
 	}
+
+	printf("--- Test result : %s\n", (ret == MPXY_TEST_SUCCESS) ? "PASS" : "FAIL");
 
 	return ret;
 }
@@ -78,7 +102,7 @@ int device_power_get_state(struct sbi_mpxy* mpxy)
 	struct rpmi_pm_get_power_state_tx pm_get_power_state_tx;
 	struct rpmi_pm_get_power_state_rx pm_get_power_state_rx;
 
-	for (u32 i = 0; i < expected_number_of_domains; i++) {
+	for (u32 i = 0; i < expected_number_of_domain; i++) {
 		pm_get_power_state_tx.domain_id = i;
 		memcpy(mpxy->shmem, &pm_get_power_state_tx, sizeof(pm_get_power_state_tx));
 		sret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_SEND_MSG_WITH_RESP,
@@ -104,7 +128,7 @@ int device_power_set_state(struct sbi_mpxy* mpxy)
 	struct rpmi_pm_set_power_state_tx pm_set_power_state_tx;
 	struct rpmi_pm_set_power_state_rx pm_set_power_state_rx;
 
-	for (u32 i = 0; i < expected_number_of_domains; i++) {
+	for (u32 i = 0; i < expected_number_of_domain; i++) {
 		pm_set_power_state_tx.domain_id = i;
 		pm_set_power_state_tx.power_state = 1;
 		memcpy(mpxy->shmem, &pm_set_power_state_tx, sizeof(pm_set_power_state_tx));
@@ -128,7 +152,7 @@ void run_device_power_test(struct sbi_mpxy* mpxy)
 	if (!has_device_power)
 		return;
 
-	printf("--- Device Power Test ---\n");
+	printf("***** Device Power Test *****\n");
 	device_power_get_num_domains(mpxy);
 	device_power_get_num_attributes(mpxy);
 	device_power_get_state(mpxy);
