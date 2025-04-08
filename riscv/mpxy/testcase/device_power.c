@@ -1,5 +1,5 @@
 /* SPDX-License-Identifier: GPL-2.0-only */
-#include "../mpxy.h"
+#include "device_power.h"
 #include "device_power_expected.h"
 #include <asm/sbi.h>
 

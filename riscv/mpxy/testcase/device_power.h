@@ -1,4 +1,5 @@
 /* SPDX-License-Identifier: GPL-2.0-only */
+#include "../mpxy.h"
 
 void device_power_get_num_domains(struct sbi_mpxy* mpxy);
 void device_power_get_num_attributes(struct sbi_mpxy* mpxy);
