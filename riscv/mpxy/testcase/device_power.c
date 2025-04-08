@@ -37,7 +37,7 @@ int device_power_get_num_domains(struct sbi_mpxy* mpxy)
 			ret = MPXY_TEST_FAIL;
 
 		printf("RPMI status = %s(%d)\n", getRPMIString(num_domain_rx.status), num_domain_rx.status);
-		printf("num_domains = %u, expected = %u\n",
+		printf("num_domains = %u,\texpected = %u\n",
 			num_domain_rx.num_domains, EXPECTED_NUMBER_OF_DOMAIN);
 
 	} else {
@@ -83,11 +83,11 @@ int device_power_get_num_attributes(struct sbi_mpxy* mpxy)
 
 			printf("       RPMI status[%u] = %s(%d)\n",
 				i, getRPMIString(pm_get_domain_attrs_rx.status), pm_get_domain_attrs_rx.status);
-			printf("              name[%u] = %s, expected = %s\n",
+			printf("              name[%u] = %s,\texpected = %s\n",
 				i, pm_get_domain_attrs_rx.name, expected_device_power_names[i]);
-			printf("transition latency[%u] = %u, expected = %u\n",
+			printf("transition latency[%u] = %u,\texpected = %u\n",
 				i, pm_get_domain_attrs_rx.transition_latency, expected_device_power_latencies[i]);
-			printf("              flag[%u] = %u, expected = %u\n",
+			printf("              flag[%u] = %u,\texpected = %u\n",
 				i, pm_get_domain_attrs_rx.flags, expected_device_power_flags[i]);
 		} else {
 			printf("sbi ecall[%u] return error(%ld)\n", i, sret.error);
@@ -126,7 +126,7 @@ int device_power_get_state(struct sbi_mpxy* mpxy)
 
 			printf("RPMI status[%u] = %s(%d)\n",
 				i, getRPMIString(pm_get_power_state_rx.status), pm_get_power_state_rx.status);
-			printf("      state[%u] = %s(%u), expected = %s(%u)\n",
+			printf("      state[%u] = %s(%u),\texpected = %s(%u)\n",
 				i, getRPMIPowerStateString(pm_get_power_state_rx.power_state), pm_get_power_state_rx.power_state,
 				   getRPMIPowerStateString(expected_get_device_power_states[i]), expected_get_device_power_states[i]);
 		} else {
@@ -202,7 +202,7 @@ int device_power_get_num_attributes_with_wrong_domain_id(struct sbi_mpxy* mpxy)
 		if (pm_get_domain_attrs_rx.status != RPMI_ERR_INVALID_PARAM)
 			ret = MPXY_TEST_FAIL;
 
-		printf("RPMI status = %s(%d), expected = %s(%d)\n",
+		printf("RPMI status = %s(%d),\texpected = %s(%d)\n",
 			getRPMIString(pm_get_domain_attrs_rx.status), pm_get_domain_attrs_rx.status,
 			getRPMIString(RPMI_ERR_INVALID_PARAM), RPMI_ERR_INVALID_PARAM);
 	} else {
@@ -239,7 +239,7 @@ int device_power_get_state_with_wrong_domain_id(struct sbi_mpxy* mpxy)
 		if (pm_get_power_state_rx.status != RPMI_ERR_INVALID_PARAM)
 			ret = MPXY_TEST_FAIL;
 
-		printf("RPMI status = %s(%d), expected = %s(%d)\n",
+		printf("RPMI status = %s(%d),\texpected = %s(%d)\n",
 			getRPMIString(pm_get_power_state_rx.status), pm_get_power_state_rx.status,
 			getRPMIString(RPMI_ERR_INVALID_PARAM), RPMI_ERR_INVALID_PARAM);
 	} else {
@@ -276,7 +276,7 @@ int device_power_set_state_with_wrong_domain_id(struct sbi_mpxy* mpxy)
 		if (pm_set_power_state_rx.status != RPMI_ERR_INVALID_PARAM)
 			ret = MPXY_TEST_FAIL;
 
-		printf("RPMI status = %s(%d), expected = %s(%d)\n",
+		printf("RPMI status = %s(%d),\texpected = %s(%d)\n",
 			getRPMIString(pm_set_power_state_rx.status), pm_set_power_state_rx.status,
 			getRPMIString(RPMI_ERR_INVALID_PARAM), RPMI_ERR_INVALID_PARAM);
 	} else {
