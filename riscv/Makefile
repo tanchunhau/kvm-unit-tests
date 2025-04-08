@@ -46,6 +46,9 @@ cflatobjs += lib/ldiv32.o
 endif
 cflatobjs += riscv/sbi-asm.o
 
+cflatobjs += riscv/mpxy/mpxy.o
+cflatobjs += riscv/mpxy/testcase/device_power.o
+
 ########################################
 
 OBJDIRS += lib/riscv
