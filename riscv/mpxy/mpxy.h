@@ -25,7 +25,7 @@ struct sbi_mpxy {
 	void *shmem;
 	unsigned long long shmem_phys;
 	bool active;
-} mpxy;
+};
 
 /* SBI MPXY channel IDs data in shared memory */
 struct sbi_mpxy_channel_ids_data {

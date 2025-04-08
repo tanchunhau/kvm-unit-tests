@@ -1442,7 +1442,7 @@ static void check_susp(void)
 static void check_mpxy(void)
 {
 	struct sbiret ret;
-	//struct sbi_mpxy mpxy;
+	struct sbi_mpxy mpxy;
 	u32 *channel_ids = NULL;
 	long expected;
 
@@ -1689,7 +1689,7 @@ static void check_mpxy(void)
 
 	}
 	printf("yo TCH fdff ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ***\n");
-	run_device_power_test();
+	run_device_power_test(&mpxy);
 
 
 
