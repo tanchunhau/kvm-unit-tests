@@ -291,7 +291,7 @@ int device_power_set_state_with_wrong_domain_id(struct sbi_mpxy* mpxy)
 
 int device_power_set_state_with_wrong_power_state(struct sbi_mpxy* mpxy)
 {
-	printf("--- Test 07 (negative) - Set power state with wrong domain id\n");
+	printf("--- Test 07 (negative) - Set power state with wrong power state\n");
 	int ret = MPXY_TEST_SUCCESS;
 	struct sbiret sret;
 	unsigned long rx_bytes;
