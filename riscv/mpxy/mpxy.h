@@ -2,8 +2,8 @@
 
 // TODO: Temperorary declare at this file (mpxy.h) , will move to a suitable header file later.
 
-#ifndef MPXY_H
-#define MPXY_H
+#ifndef _MPXY_H
+#define _MPXY_H
 
 #include "testcase/device_power.h"
 #include <libcflat.h>
@@ -239,4 +239,5 @@ enum rpmi_error_codes {
 	RPMI_ERR_RESERVED_END		= -127,
 	RPMI_ERR_VENDOR_START		= -128,
 };
+
 #endif // MPXY_H
