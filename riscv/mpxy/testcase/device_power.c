@@ -30,7 +30,7 @@ int device_power_get_num_domains(struct sbi_mpxy* mpxy)
 			num_domain_rx.num_domains, expected_number_of_domain);
 
 	} else {
-		printf("sbi ecall return error(%d)\n", sret.error);
+		printf("sbi ecall return error(%ld)\n", sret.error);
 		ret = MPXY_TEST_FAIL;
 	}
 
@@ -78,7 +78,7 @@ int device_power_get_num_attributes(struct sbi_mpxy* mpxy)
 			printf("flag[%u] = %u, expected = %u\n",
 				i, pm_get_domain_attrs_rx.flags, expected_device_power_flags[i]);
 		} else {
-			printf("sbi ecall[%u] return error(%d)\n", i,sret.error);
+			printf("sbi ecall[%u] return error(%ld)\n", i, sret.error);
 			ret = MPXY_TEST_FAIL;
 		}
 
