@@ -8,6 +8,8 @@
 #include "testcase/device_power.h"
 #include <libcflat.h>
 
+#define MPXY_TEST_SUCCESS 0
+#define MPXY_TEST_FAIL   -1
 
 #define SBI_EXT_MPXY			0x4D505859
 /* SBI function IDs for MPXY extension */
@@ -136,17 +138,12 @@ struct rpmi_mbox_message {
 	int error;
 };
 
-
-
 struct sbi_mpxy_rpmi_channel_attrs {
 	/* RPMI service group ID */
 	u32 servicegroup_id;
 	/* RPMI service group version */
 	u32 servicegroup_version;
 };
-
-
-
 
 /** RPMI error codes */
 enum rpmi_error_codes {
