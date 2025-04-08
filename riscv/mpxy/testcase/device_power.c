@@ -25,7 +25,7 @@ int device_power_get_num_domains(struct sbi_mpxy* mpxy)
 		else if (num_domain_rx.num_domains != expected_number_of_domains)
 			ret = MPXY_TEST_FAIL;
 
-		printf("status = %d\n", num_domain_rx.status);
+		printf("RPMI status = %s(%d)\n", getRPMIString(num_domain_rx.status), num_domain_rx.status);
 		printf("num_domains = %u, expected = %u\n",
 			num_domain_rx.num_domains, expected_number_of_domains);
 
