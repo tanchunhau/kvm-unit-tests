@@ -10,7 +10,6 @@
 
 const bool has_device_power = true;
 const u32 channel_id = 4098;
-const u32 expected_number_of_domain = EXPECTED_NUMBER_OF_DOMAIN;
 
 const char* expected_device_power_names[EXPECTED_NUMBER_OF_DOMAIN] =
         {"dpwr0", "dpwr1", "dpwr2", "dpwr3", "dpwr4", "dpwr5"};

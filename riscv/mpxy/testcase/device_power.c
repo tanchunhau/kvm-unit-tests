@@ -34,7 +34,7 @@ int device_power_get_num_domains(struct sbi_mpxy* mpxy)
 		ret = MPXY_TEST_FAIL;
 	}
 
-	printf("--- Test result : %s\n", (ret == MPXY_TEST_SUCCESS) ? "PASS" : "FAIL");
+	printf("--- Test result : %s\n\n", (ret == MPXY_TEST_SUCCESS) ? "PASS" : "FAIL");
 
 	return ret;
 }
@@ -48,7 +48,7 @@ int device_power_get_num_attributes(struct sbi_mpxy* mpxy)
 	struct rpmi_pm_get_domain_attrs_tx pm_get_domain_attrs_tx;
 	struct rpmi_pm_get_domain_attrs_rx pm_get_domain_attrs_rx;
 
-	for (u32 i = 0; i < expected_number_of_domain; i++) {
+	for (u32 i = 0; i < EXPECTED_NUMBER_OF_DOMAIN; i++) {
 		pm_get_domain_attrs_tx.domain_id = i;
 
 		memcpy(mpxy->shmem, &pm_get_domain_attrs_tx, sizeof(pm_get_domain_attrs_tx));
@@ -71,24 +71,19 @@ int device_power_get_num_attributes(struct sbi_mpxy* mpxy)
 				ret = MPXY_TEST_FAIL;
 
 			printf("RPMI status[%u] = %s(%d)\n", i, getRPMIString(pm_get_domain_attrs_rx.status), pm_get_domain_attrs_rx.status);
-			printf("name[%u] = %s, expected = %s\n",
+			printf("              name[%u] = %s, expected = %s\n",
 				i, pm_get_domain_attrs_rx.name, expected_device_power_names[i]);
 			printf("transition latency[%u] = %u, expected = %u\n",
 				i, pm_get_domain_attrs_rx.transition_latency, expected_device_power_latencies[i]);
-			printf("flag[%u] = %u, expected = %u\n",
+			printf("              flag[%u] = %u, expected = %u\n",
 				i, pm_get_domain_attrs_rx.flags, expected_device_power_flags[i]);
 		} else {
 			printf("sbi ecall[%u] return error(%ld)\n", i, sret.error);
 			ret = MPXY_TEST_FAIL;
 		}
-
-		printf("name[%u] = %s\n",i, pm_get_domain_attrs_rx.name);
-		printf("*** get_domain_attrs status = %d\n", pm_get_domain_attrs_rx.status);
-		printf("flags = %u\n", pm_get_domain_attrs_rx.flags);
-		printf("transition_latency = %u\n", pm_get_domain_attrs_rx.transition_latency);
 	}
 
-	printf("--- Test result : %s\n", (ret == MPXY_TEST_SUCCESS) ? "PASS" : "FAIL");
+	printf("--- Test result : %s\n\n", (ret == MPXY_TEST_SUCCESS) ? "PASS" : "FAIL");
 
 	return ret;
 }
@@ -102,7 +97,7 @@ int device_power_get_state(struct sbi_mpxy* mpxy)
 	struct rpmi_pm_get_power_state_tx pm_get_power_state_tx;
 	struct rpmi_pm_get_power_state_rx pm_get_power_state_rx;
 
-	for (u32 i = 0; i < expected_number_of_domain; i++) {
+	for (u32 i = 0; i < EXPECTED_NUMBER_OF_DOMAIN; i++) {
 		pm_get_power_state_tx.domain_id = i;
 		memcpy(mpxy->shmem, &pm_get_power_state_tx, sizeof(pm_get_power_state_tx));
 		sret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_SEND_MSG_WITH_RESP,
@@ -128,7 +123,7 @@ int device_power_set_state(struct sbi_mpxy* mpxy)
 	struct rpmi_pm_set_power_state_tx pm_set_power_state_tx;
 	struct rpmi_pm_set_power_state_rx pm_set_power_state_rx;
 
-	for (u32 i = 0; i < expected_number_of_domain; i++) {
+	for (u32 i = 0; i < EXPECTED_NUMBER_OF_DOMAIN; i++) {
 		pm_set_power_state_tx.domain_id = i;
 		pm_set_power_state_tx.power_state = 1;
 		memcpy(mpxy->shmem, &pm_set_power_state_tx, sizeof(pm_set_power_state_tx));
