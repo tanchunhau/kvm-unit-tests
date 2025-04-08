@@ -56,7 +56,7 @@ int strncmp(const char *a, const char *b, size_t n)
 	*/
 
 	for (; n--; ++a, ++b) {
-		printf("n = %d ", n);
+		printf("n = %ld ", n);
 		if (*a != *b) {
 
 			printf("k1 %d\n", (*a - *b));
