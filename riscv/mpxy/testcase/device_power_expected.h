@@ -2,3 +2,5 @@
 
 bool has_device_power = true;
 u32 channel_id = 4098;
+
+u32 expected_number_of_domains = 6;
