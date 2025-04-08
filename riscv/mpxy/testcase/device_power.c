@@ -161,6 +161,10 @@ int device_power_set_state(struct sbi_mpxy* mpxy)
 			rx_bytes = sret.value;
 			rx_bytes = MIN(sizeof(pm_set_power_state_rx), rx_bytes);
 			memcpy(&pm_set_power_state_rx, mpxy->shmem, rx_bytes);
+
+			if (pm_set_power_state_rx.status != RPMI_SUCCESS)
+				ret = MPXY_TEST_FAIL;
+
 			printf("       RPMI status[%u] = %s(%d)\n",
 				i, getRPMIString(pm_set_power_state_rx.status), pm_set_power_state_rx.status);
 		} else {
