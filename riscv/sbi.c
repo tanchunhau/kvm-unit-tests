@@ -1543,7 +1543,7 @@ static void check_mpxy(void)
 	struct sbi_mpxy_channel_attrs attrs;
 	struct sbi_mpxy_rpmi_channel_attrs rpmi_attrs;
 	for (u32 i = 0; i < channel_count; i++) {
-		printf("\nChannel %u\n", i);
+		printf("Channel %u\n", i);
 		u32 attr_count = sizeof(attrs) / sizeof(u32);
 		ret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_READ_ATTRS,
 			channel_ids[i], SBI_MPXY_ATTR_MSG_PROT_ID, attr_count, 0, 0, 0);
