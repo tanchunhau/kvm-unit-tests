@@ -4,7 +4,7 @@
 #define _MPXY_DEVICE_POWER_EXPECTED_H
 
 #include <libcflat.h>
-
+#include "device_power.h"
 
 const bool has_device_power = true;
 const u32 channel_id = 4098;
@@ -18,5 +18,10 @@ const u32 expected_device_power_latencies[EXPECTED_NUMBER_OF_DOMAIN] =
 
 const u32 expected_device_power_flags[EXPECTED_NUMBER_OF_DOMAIN] =
         {6, 6, 6, 6, 6, 6};
+
+const u32 expected_device_power_states[EXPECTED_NUMBER_OF_DOMAIN] =
+        {RMPI_POWER_STATE_ON, RMPI_POWER_STATE_ON,
+         RMPI_POWER_STATE_ON, RMPI_POWER_STATE_ON,
+         RMPI_POWER_STATE_ON, RMPI_POWER_STATE_ON};
 
 #endif // _MPXY_DEVICE_POWER_EXPECTED_H

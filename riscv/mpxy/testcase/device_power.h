@@ -56,7 +56,16 @@ enum rpmi_device_power_service_id {
 	RPMI_DP_SRV_ID_MAX_COUNT,
 };
 
+enum rpmi_device_power_state {
+	RMPI_POWER_STATE_ON = 0x00,
+	RMPI_POWER_STATE_OFF = 0x03,
+};
+
+const char* getRPMIPowerStateString(const enum rpmi_device_power_state state);
+
 struct sbi_mpxy;  // Forward declaration
+
+/* testcases */
 int device_power_get_num_domains(struct sbi_mpxy* mpxy);
 int device_power_get_num_attributes(struct sbi_mpxy* mpxy);
 int device_power_get_state(struct sbi_mpxy* mpxy);

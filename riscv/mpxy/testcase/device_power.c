@@ -1,8 +1,19 @@
 /* SPDX-License-Identifier: GPL-2.0-only */
-#include "device_power.h"
+
 #include "device_power_expected.h"
 #include "../mpxy.h"
 #include <asm/sbi.h>
+
+const char* getRPMIPowerStateString(const enum rpmi_device_power_state state) {
+	switch (state) {
+		case RMPI_POWER_STATE_ON:
+			return "ON";
+		case RMPI_POWER_STATE_OFF:
+			return "OFF";
+		default:
+			return "UNKNOWN";
+	}
+}
 
 int device_power_get_num_domains(struct sbi_mpxy* mpxy)
 {
@@ -91,7 +102,7 @@ int device_power_get_num_attributes(struct sbi_mpxy* mpxy)
 
 int device_power_get_state(struct sbi_mpxy* mpxy)
 {
-	printf("device_power_get_state\n");
+	printf("--- Test 03 - Get power state\n");
 	int ret = MPXY_TEST_SUCCESS;
 	struct sbiret sret;
 	unsigned long rx_bytes;
@@ -107,10 +118,23 @@ int device_power_get_state(struct sbi_mpxy* mpxy)
 			rx_bytes = sret.value;
 			rx_bytes = MIN(sizeof(pm_get_power_state_rx), rx_bytes);
 			memcpy(&pm_get_power_state_rx, mpxy->shmem, rx_bytes);
+
+			if (pm_get_power_state_rx.status != RPMI_SUCCESS)
+				ret = MPXY_TEST_FAIL;
+			else if (pm_get_power_state_rx.power_state != expected_device_power_states[i])
+				ret = MPXY_TEST_FAIL;
+
+			printf("       RPMI status[%u] = %s(%d)\n",
+				i, getRPMIString(pm_get_power_state_rx.status), pm_get_power_state_rx.status);
+			printf("              name[%u] = %s, expected = %s\n",
+				i, pm_get_power_state_rx.power_state, expected_device_power_states[i]);
+		} else {
+			printf("sbi ecall[%u] return error(%ld)\n", i, sret.error);
+			ret = MPXY_TEST_FAIL;
 		}
-		printf("*** get_power_state status = %d\n", pm_get_power_state_rx.status);
-		printf("power_state = %u\n", pm_get_power_state_rx.power_state);
 	}
+
+	printf("--- Test result : %s\n\n", (ret == MPXY_TEST_SUCCESS) ? "PASS" : "FAIL");
 
 	return ret;
 }
