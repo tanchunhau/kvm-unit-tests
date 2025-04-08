@@ -22,12 +22,12 @@ int device_power_get_num_domains(struct sbi_mpxy* mpxy)
 
 		if (num_domain_rx.status != RPMI_SUCCESS)
 			ret = MPXY_TEST_FAIL;
-		else if (num_domain_rx.num_domains != expected_number_of_domain)
+		else if (num_domain_rx.num_domains != EXPECTED_NUMBER_OF_DOMAIN)
 			ret = MPXY_TEST_FAIL;
 
 		printf("RPMI status = %s(%d)\n", getRPMIString(num_domain_rx.status), num_domain_rx.status);
 		printf("num_domains = %u, expected = %u\n",
-			num_domain_rx.num_domains, expected_number_of_domain);
+			num_domain_rx.num_domains, EXPECTED_NUMBER_OF_DOMAIN);
 
 	} else {
 		printf("sbi ecall return error(%ld)\n", sret.error);
