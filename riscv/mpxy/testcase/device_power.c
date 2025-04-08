@@ -32,7 +32,7 @@ int device_power_get_num_domains(struct sbi_mpxy* mpxy)
 		ret = MPXY_TEST_FAIL;
 	}
 
-	printf("Test result : %S\n", (ret == MPXY_TEST_SUCCESS) ? "PASS" : "FAIL");
+	printf("Test result : %s\n", (ret == MPXY_TEST_SUCCESS) ? "PASS" : "FAIL");
 
 	return ret;
 }
