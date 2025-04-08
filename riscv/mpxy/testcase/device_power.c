@@ -3,7 +3,7 @@
 #include "device_power_expected.h"
 #include <asm/sbi.h>
 //#include "../mpxy.h"
-#include <libcflat.h>
+//#include <libcflat.h>
 
 void device_power_get_num_domains(struct sbi_mpxy* mpxy)
 {
