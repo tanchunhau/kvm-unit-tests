@@ -330,10 +330,12 @@ int device_power_set_state_with_wrong_power_state(struct sbi_mpxy* mpxy)
 
 void run_device_power_test(struct sbi_mpxy* mpxy)
 {
-	if (!has_device_power)
-		return;
-
 	printf("***** Device Power Test *****\n\n");
+	if (!has_device_power) {
+		printf("SKIP\n");
+		return;
+	}
+
 	device_power_get_num_domains(mpxy);
 	device_power_get_num_attributes(mpxy);
 	device_power_get_state(mpxy);
