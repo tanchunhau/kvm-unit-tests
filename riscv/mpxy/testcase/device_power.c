@@ -10,7 +10,7 @@ void device_power_get_num_domains()
 	struct rpmi_pm_get_num_domain_rx num_domain_rx;
 	unsigned long rx_bytes;
 
-	struct rpmi_pm_get_domain_attrs_tx pm_get_domain_attrs_tx;
+	//struct rpmi_pm_get_domain_attrs_tx pm_get_domain_attrs_tx;
 	sret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_SEND_MSG_WITH_RESP,
 		channel_id, RPMI_DP_SRV_GET_NUM_DOMAINS, 0, 0, 0, 0);
 
