@@ -1442,7 +1442,7 @@ static void check_susp(void)
 static void check_mpxy(void)
 {
 	struct sbiret ret;
-	struct sbi_mpxy mpxy;
+	//struct sbi_mpxy mpxy;
 	u32 *channel_ids = NULL;
 	long expected;
 
