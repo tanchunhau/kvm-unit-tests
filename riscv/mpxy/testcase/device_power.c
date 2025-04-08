@@ -63,7 +63,7 @@ int device_power_get_num_attributes(struct sbi_mpxy* mpxy)
 
 			if (pm_get_domain_attrs_rx.status != RPMI_SUCCESS)
 				ret = MPXY_TEST_FAIL;
-			else if (pm_get_domain_attrs_rx.name != expected_device_power_names[i])
+			else if (strcmp(pm_get_domain_attrs_rx.name, expected_device_power_names[i]) == 0)
 				ret = MPXY_TEST_FAIL;
 			else if (pm_get_domain_attrs_rx.transition_latency != expected_device_power_latencies[i])
 				ret = MPXY_TEST_FAIL;
@@ -147,7 +147,7 @@ void run_device_power_test(struct sbi_mpxy* mpxy)
 	if (!has_device_power)
 		return;
 
-	printf("***** Device Power Test *****\n");
+	printf("***** Device Power Test *****\n\n");
 	device_power_get_num_domains(mpxy);
 	device_power_get_num_attributes(mpxy);
 	device_power_get_state(mpxy);

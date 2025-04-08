@@ -5,11 +5,10 @@
 
 #include <libcflat.h>
 
-#define EXPECTED_NUMBER_OF_DOMAIN 6
-
 
 const bool has_device_power = true;
 const u32 channel_id = 4098;
+#define EXPECTED_NUMBER_OF_DOMAIN 6
 
 const char* expected_device_power_names[EXPECTED_NUMBER_OF_DOMAIN] =
         {"dpwr0", "dpwr1", "dpwr2", "dpwr3", "dpwr4", "dpwr5"};
