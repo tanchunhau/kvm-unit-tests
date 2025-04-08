@@ -31,6 +31,7 @@
 
 #include "sbi-tests.h"
 #include "mpxy/mpxy.h"
+#include "mpxy/mpxy_test.h"
 
 #define	HIGH_ADDR_BOUNDARY	((phys_addr_t)1 << 32)
 
@@ -1590,104 +1591,6 @@ static void check_mpxy(void)
 		printf("\n");
 	}
 
-	struct sbiret sret;
-	struct rpmi_pm_get_num_domain_rx num_domain_rx;
-	unsigned long rx_bytes;
-
-	struct rpmi_pm_get_domain_attrs_tx pm_get_domain_attrs_tx;
-
-	/* Message protocols allowed to have no data in messages */
-	//if (tx_len)
-	//	memcpy(mpxy->shmem, tx, tx_len);
-
-
-	sret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_SEND_MSG_WITH_RESP,
-		channel_ids[0], RPMI_DP_SRV_GET_NUM_DOMAINS, 0, 0, 0, 0);
-
-	if (!sret.error) {
-		rx_bytes = sret.value;
-		rx_bytes = MIN(sizeof(num_domain_rx), rx_bytes);
-		memcpy(&num_domain_rx, mpxy.shmem, rx_bytes);
-	}
-	printf("status = %d\n", num_domain_rx.status);
-	printf("num_domains = %u\n\n", num_domain_rx.num_domains);
-
-	struct rpmi_pm_get_domain_attrs_rx pm_get_domain_attrs_rx;
-	struct rpmi_pm_get_power_state_tx pm_get_power_state_tx;
-	struct rpmi_pm_get_power_state_rx pm_get_power_state_rx;
-	struct rpmi_pm_set_power_state_tx pm_set_power_state_tx;
-	struct rpmi_pm_set_power_state_rx pm_set_power_state_rx;
-
-	for (u32 i = 0; i < num_domain_rx.num_domains; i++) {
-
-		// get attribute
-		pm_get_domain_attrs_tx.domain_id = i;
-		if (sizeof(pm_get_domain_attrs_tx))
-			memcpy(mpxy.shmem, &pm_get_domain_attrs_tx, sizeof(pm_get_domain_attrs_tx));
-
-		sret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_SEND_MSG_WITH_RESP,
-			channel_ids[0], RPMI_DP_SRV_GET_ATTRS, sizeof(pm_get_domain_attrs_tx), 0, 0, 0);
-
-		if (!sret.error) {
-			rx_bytes = sret.value;
-			rx_bytes = MIN(sizeof(pm_get_domain_attrs_rx), rx_bytes);
-			memcpy(&pm_get_domain_attrs_rx, mpxy.shmem, rx_bytes);
-		}
-		printf("name[%u] = %s\n",i, pm_get_domain_attrs_rx.name);
-		printf("*** get_domain_attrs status = %d\n", pm_get_domain_attrs_rx.status);
-		printf("flags = %u\n", pm_get_domain_attrs_rx.flags);
-		printf("transition_latency = %u\n", pm_get_domain_attrs_rx.transition_latency);
-
-		// get state
-		pm_get_power_state_tx.domain_id = i;
-		if (sizeof(pm_get_power_state_tx))
-			memcpy(mpxy.shmem, &pm_get_power_state_tx, sizeof(pm_get_power_state_tx));
-
-		sret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_SEND_MSG_WITH_RESP,
-			channel_ids[0], RPMI_DP_SRV_GET_STATE, sizeof(pm_get_power_state_tx), 0, 0, 0);
-
-		if (!sret.error) {
-			rx_bytes = sret.value;
-			rx_bytes = MIN(sizeof(pm_get_power_state_rx), rx_bytes);
-			memcpy(&pm_get_power_state_rx, mpxy.shmem, rx_bytes);
-		}
-		printf("*** get_power_state status = %d\n", pm_get_power_state_rx.status);
-		printf("power_state = %u\n", pm_get_power_state_rx.power_state);
-
-		// set state
-		pm_set_power_state_tx.domain_id = i;
-		pm_set_power_state_tx.power_state = 0;
-		if (sizeof(pm_set_power_state_tx))
-			memcpy(mpxy.shmem, &pm_set_power_state_tx, sizeof(pm_set_power_state_tx));
-
-		sret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_SEND_MSG_WITH_RESP,
-			channel_ids[0], RPMI_DP_SRV_SET_STATE, sizeof(pm_set_power_state_tx), 0, 0, 0);
-
-		if (!sret.error) {
-			rx_bytes = sret.value;
-			rx_bytes = MIN(sizeof(pm_set_power_state_rx), rx_bytes);
-			memcpy(&pm_set_power_state_rx, mpxy.shmem, rx_bytes);
-		}
-		printf("*** set_power_state status = %d\n", pm_set_power_state_rx.status);
-
-		// get state
-		pm_get_power_state_tx.domain_id = i;
-		if (sizeof(pm_get_power_state_tx))
-			memcpy(mpxy.shmem, &pm_get_power_state_tx, sizeof(pm_get_power_state_tx));
-
-		sret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_SEND_MSG_WITH_RESP,
-			channel_ids[0], RPMI_DP_SRV_GET_STATE, sizeof(pm_get_power_state_tx), 0, 0, 0);
-
-		if (!sret.error) {
-			rx_bytes = sret.value;
-			rx_bytes = MIN(sizeof(pm_get_power_state_rx), rx_bytes);
-			memcpy(&pm_get_power_state_rx, mpxy.shmem, rx_bytes);
-		}
-		printf("*** get_power_state status = %d\n", pm_get_power_state_rx.status);
-		printf("power_state = %u\n", pm_get_power_state_rx.power_state);
-		printf("\n");
-
-	}
 	printf("yo TCH fdff ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ***\n");
 	run_device_power_test(&mpxy);
 

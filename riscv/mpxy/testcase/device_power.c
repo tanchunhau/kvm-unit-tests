@@ -1,6 +1,7 @@
 /* SPDX-License-Identifier: GPL-2.0-only */
 #include "device_power.h"
 #include "device_power_expected.h"
+#include "../mpxy.h"
 #include <asm/sbi.h>
 
 int device_power_get_num_domains(struct sbi_mpxy* mpxy)

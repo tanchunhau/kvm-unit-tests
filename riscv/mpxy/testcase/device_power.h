@@ -1,7 +1,5 @@
 /* SPDX-License-Identifier: GPL-2.0-only */
 #include <libcflat.h>
-#include "../mpxy.h"
-
 
 #define RPMI_PM_DOMAIN_NAME_LEN		16
 
