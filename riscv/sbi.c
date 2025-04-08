@@ -1543,13 +1543,13 @@ static void check_mpxy(void)
 	struct sbi_mpxy_channel_attrs attrs;
 	struct sbi_mpxy_rpmi_channel_attrs rpmi_attrs;
 	for (u32 i = 0; i < channel_count; i++) {
-
+		printf("\nChannel %u\n", i);
 		u32 attr_count = sizeof(attrs) / sizeof(u32);
 		ret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_READ_ATTRS,
 			channel_ids[i], SBI_MPXY_ATTR_MSG_PROT_ID, attr_count, 0, 0, 0);
 		if (!ret.error) {
 			for (u32 j = 0; j < attr_count; j++) {
-				printf("%s (%u) = %u\n", mpxy_channel_attributes[j], j, ((u32*)mpxy.shmem)[j]);
+				printf("%s = %u\n", mpxy_channel_attributes[j], ((u32*)mpxy.shmem)[j]);
 			}
 		}
 
@@ -1558,7 +1558,7 @@ static void check_mpxy(void)
 			channel_ids[i], SBI_MPXY_ATTR_MSGPROTO_ATTR_START, rpmi_attr_count, 0, 0, 0);
 		if (!ret.error) {
 			for (u32 j = 0; j < rpmi_attr_count; j++) {
-				printf("%s (%u) = %u\n", mpxy_service_group_attributes[j], j, ((u32*)mpxy.shmem)[j]);
+				printf("%s = %u\n", mpxy_service_group_attributes[j], ((u32*)mpxy.shmem)[j]);
 			}
 		}
 
