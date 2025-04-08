@@ -314,7 +314,7 @@ int device_power_set_state_with_wrong_power_state(struct sbi_mpxy* mpxy)
 			if (pm_set_power_state_rx.status != RPMI_ERR_INVALID_PARAM)
 				ret = MPXY_TEST_FAIL;
 
-			printf("RPMI status[%u] = %s(%d), expected = %s(%d)\n",
+			printf("RPMI status[%u] = %s(%d),\texpected = %s(%d)\n",
 				i, getRPMIString(pm_set_power_state_rx.status), pm_set_power_state_rx.status,
 				getRPMIString(RPMI_ERR_INVALID_PARAM), RPMI_ERR_INVALID_PARAM);
 		} else {
