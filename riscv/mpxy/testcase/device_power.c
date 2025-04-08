@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: GPL-2.0-only */
 #include "../mpxy.h"
 #include "device_power_expected.h"
-
+#include <asm/sbi.h>
 
 void device_power_get_num_domains()
 {
