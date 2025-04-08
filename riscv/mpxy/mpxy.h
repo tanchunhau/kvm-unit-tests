@@ -5,8 +5,9 @@
 #ifndef _MPXY_H
 #define _MPXY_H
 
-#include <libcflat.h>
 #include "testcase/device_power.h"
+#include <libcflat.h>
+
 
 #define SBI_EXT_MPXY			0x4D505859
 /* SBI function IDs for MPXY extension */
