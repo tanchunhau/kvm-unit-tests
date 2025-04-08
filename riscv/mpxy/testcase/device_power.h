@@ -72,6 +72,7 @@ int device_power_get_state(struct sbi_mpxy* mpxy);
 int device_power_set_state(struct sbi_mpxy* mpxy);
 
 int device_power_get_num_attributes_with_wrong_domain_id(struct sbi_mpxy* mpxy);
+int device_power_get_state_with_wrong_domain_id(struct sbi_mpxy* mpxy);
 
 void run_device_power_test(struct sbi_mpxy* mpxy);
 
