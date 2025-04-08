@@ -215,7 +215,7 @@ int device_power_get_num_attributes_with_wrong_domain_id(struct sbi_mpxy* mpxy)
 	return ret;
 }
 
-int device_power_state_with_wrong_domain_id(struct sbi_mpxy* mpxy)
+int device_power_get_state_with_wrong_domain_id(struct sbi_mpxy* mpxy)
 {
 	printf("--- Test 06 (negative) - Get power state with wrong domain id\n");
 	int ret = MPXY_TEST_SUCCESS;
