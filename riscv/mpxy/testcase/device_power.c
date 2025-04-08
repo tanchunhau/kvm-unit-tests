@@ -226,4 +226,5 @@ void run_device_power_test(struct sbi_mpxy* mpxy)
 	device_power_get_num_attributes(mpxy);
 	device_power_get_state(mpxy);
 	device_power_set_state(mpxy);
+	device_power_get_num_attributes_with_wrong_domain_id(mpxy);
 }
