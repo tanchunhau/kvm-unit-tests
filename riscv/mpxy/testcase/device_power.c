@@ -229,7 +229,7 @@ int device_power_get_state_with_wrong_domain_id(struct sbi_mpxy* mpxy)
 	memcpy(mpxy->shmem, &pm_get_power_state_tx, sizeof(pm_get_power_state_tx));
 
 	sret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_SEND_MSG_WITH_RESP,
-		channel_id, RPMI_DP_SRV_GET_ATTRS, sizeof(pm_get_power_state_tx), 0, 0, 0);
+		channel_id, RPMI_DP_SRV_GET_STATE, sizeof(pm_get_power_state_tx), 0, 0, 0);
 
 	if (!sret.error) {
 		rx_bytes = sret.value;
@@ -266,7 +266,7 @@ int device_power_set_state_with_wrong_domain_id(struct sbi_mpxy* mpxy)
 	memcpy(mpxy->shmem, &pm_set_power_state_tx, sizeof(pm_set_power_state_tx));
 
 	sret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_SEND_MSG_WITH_RESP,
-		channel_id, RPMI_DP_SRV_GET_ATTRS, sizeof(pm_set_power_state_tx), 0, 0, 0);
+		channel_id, RPMI_DP_SRV_SET_STATE, sizeof(pm_set_power_state_tx), 0, 0, 0);
 
 	if (!sret.error) {
 		rx_bytes = sret.value;
