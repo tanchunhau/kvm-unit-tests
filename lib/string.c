@@ -47,9 +47,27 @@ char *strcpy(char *dest, const char *src)
 
 int strncmp(const char *a, const char *b, size_t n)
 {
+	/*
 	for (; n--; ++a, ++b)
 		if (*a != *b || *a == '\0')
 			return *a - *b;
+
+	return 0;
+	*/
+
+	for (; n--; ++a, ++b) {
+		printf("n = %d ", n);
+		if (*a != *b) {
+
+			printf("k1 %d\n", int(*a - *b));
+			return *a - *b;
+		}
+
+		if (*a == '\0') {
+			printf("k2 %d\n", int(*a - *b));
+			return *a - *b;
+		}
+	}
 
 	return 0;
 }
