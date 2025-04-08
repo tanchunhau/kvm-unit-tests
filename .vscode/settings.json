@@ -1,5 +1,6 @@
 {
         "files.associations": {
-                "mpxy.h": "c"
+                "mpxy.h": "c",
+                "device_power.h": "c"
         }
 }

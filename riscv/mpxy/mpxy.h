@@ -95,49 +95,6 @@ enum sbi_mpxy_attribute_id {
 	SBI_MPXY_ATTR_MSGPROTO_ATTR_END		= 0xffffffff
 };
 
-// from linux:
-/* RPMI linux mailbox attribute IDs */
-enum rpmi_mbox_attribute_id {
-	RPMI_MBOX_ATTR_SPEC_VERSION = 0,
-	RPMI_MBOX_ATTR_MAX_MSG_DATA_SIZE,
-	RPMI_MBOX_ATTR_SERVICEGROUP_ID,
-	RPMI_MBOX_ATTR_SERVICEGROUP_VERSION,
-	RPMI_MBOX_ATTR_MAX_ID,
-};
-
-/**RPMI linux mailbox message types */
-enum rpmi_mbox_message_type {
-	RPMI_MBOX_MSG_TYPE_GET_ATTRIBUTE = 0,
-	RPMI_MBOX_MSG_TYPE_SET_ATTRIBUTE,
-	RPMI_MBOX_MSG_TYPE_SEND_WITH_RESPONSE,
-	RPMI_MBOX_MSG_TYPE_SEND_WITHOUT_RESPONSE,
-	RPMI_MBOX_MSG_TYPE_NOTIFICATION_EVENT,
-	RPMI_MBOX_MSG_MAX_TYPE,
-};
-
-/* RPMI linux mailbox message instance */
-struct rpmi_mbox_message {
-	enum rpmi_mbox_message_type type;
-	union {
-		struct {
-			enum rpmi_mbox_attribute_id id;
-			u32 value;
-		} attr;
-
-		struct {
-			u32 service_id;
-			void *request;
-			unsigned long request_len;
-			void *response;
-			unsigned long max_response_len;
-			unsigned long out_response_len;
-		} data;
-
-		struct rpmi_notification_event *notif_event;
-	};
-	int error;
-};
-
 struct sbi_mpxy_rpmi_channel_attrs {
 	/* RPMI service group ID */
 	u32 servicegroup_id;
@@ -169,4 +126,4 @@ enum rpmi_error_codes {
 
 const char* getRPMIString(const enum rpmi_error_codes code);
 
-#endif // MPXY_H
+#endif // _MPXY_H
