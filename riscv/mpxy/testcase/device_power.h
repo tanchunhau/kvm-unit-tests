@@ -58,7 +58,10 @@ enum rpmi_device_power_service_id {
 
 enum rpmi_device_power_state {
 	RMPI_POWER_STATE_ON = 0x00,
+	RMPI_POWER_STATE_RESERVED0 = 0x01,
+	RMPI_POWER_STATE_RESERVED1 = 0x02,
 	RMPI_POWER_STATE_OFF = 0x03,
+	RMPI_POWER_STATE_RESERVED2 = 0x02,
 };
 
 const char* getRPMIPowerStateString(const enum rpmi_device_power_state state);
@@ -73,6 +76,8 @@ int device_power_set_state(struct sbi_mpxy* mpxy);
 
 int device_power_get_num_attributes_with_wrong_domain_id(struct sbi_mpxy* mpxy);
 int device_power_get_state_with_wrong_domain_id(struct sbi_mpxy* mpxy);
+int device_power_set_state_with_wrong_domain_id(struct sbi_mpxy* mpxy);
+int device_power_set_state_with_wrong_power_state(struct sbi_mpxy* mpxy);
 
 void run_device_power_test(struct sbi_mpxy* mpxy);
 
