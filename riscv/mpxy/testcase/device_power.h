@@ -1,4 +1,8 @@
 /* SPDX-License-Identifier: GPL-2.0-only */
+
+#ifndef _MPXY_DEVICE_POWER_H
+#define _MPXY_DEVICE_POWER_H
+
 #include <libcflat.h>
 
 #define RPMI_PM_DOMAIN_NAME_LEN		16
@@ -58,3 +62,5 @@ int device_power_get_num_attributes(struct sbi_mpxy* mpxy);
 int device_power_get_state(struct sbi_mpxy* mpxy);
 int device_power_set_state(struct sbi_mpxy* mpxy);
 void run_device_power_test(struct sbi_mpxy* mpxy);
+
+#endif // _MPXY_DEVICE_POWER_H
