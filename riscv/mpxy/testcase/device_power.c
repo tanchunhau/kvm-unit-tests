@@ -35,6 +35,8 @@ void device_power_get_num_attributes(struct sbi_mpxy* mpxy)
 	for (u32 i = 0; i < expected_number_of_domains; i++) {
 		pm_get_domain_attrs_tx.domain_id = i;
 
+		memcpy(mpxy->shmem, &pm_get_domain_attrs_tx, sizeof(pm_get_domain_attrs_tx));
+
 		sret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_SEND_MSG_WITH_RESP,
 			channel_id, RPMI_DP_SRV_GET_ATTRS, sizeof(pm_get_domain_attrs_tx), 0, 0, 0);
 
@@ -53,6 +55,24 @@ void device_power_get_num_attributes(struct sbi_mpxy* mpxy)
 void device_power_get_state(struct sbi_mpxy* mpxy)
 {
 	printf("device_power_get_state\n");
+	struct sbiret sret;
+	unsigned long rx_bytes;
+	struct rpmi_pm_get_power_state_tx pm_get_power_state_tx;
+	struct rpmi_pm_get_power_state_rx pm_get_power_state_rx;
+
+	for (u32 i = 0; i < expected_number_of_domains; i++) {
+		pm_get_power_state_tx.domain_id = i;
+		memcpy(mpxy->shmem, &pm_get_power_state_tx, sizeof(pm_get_power_state_tx));
+		sret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_SEND_MSG_WITH_RESP,
+			channel_id, RPMI_DP_SRV_GET_STATE, sizeof(pm_get_power_state_tx), 0, 0, 0);
+		if (!sret.error) {
+			rx_bytes = sret.value;
+			rx_bytes = MIN(sizeof(pm_get_power_state_rx), rx_bytes);
+			memcpy(&pm_get_power_state_rx, mpxy->shmem, rx_bytes);
+		}
+		printf("*** get_power_state status = %d\n", pm_get_power_state_rx.status);
+		printf("power_state = %u\n", pm_get_power_state_rx.power_state);
+	}
 }
 
 void device_power_set_state(struct sbi_mpxy* mpxy)
