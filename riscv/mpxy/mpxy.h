@@ -167,7 +167,7 @@ enum rpmi_error_codes {
 	RPMI_ERR_VENDOR_START		= -128,
 };
 
-char* getRPMIString(const enum rpmi_error_codes code)
+const char* getRPMIString(const enum rpmi_error_codes code)
 {
 	switch (code) {
 		case RPMI_SUCCESS:
