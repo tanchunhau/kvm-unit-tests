@@ -121,14 +121,14 @@ int device_power_get_state(struct sbi_mpxy* mpxy)
 
 			if (pm_get_power_state_rx.status != RPMI_SUCCESS)
 				ret = MPXY_TEST_FAIL;
-			else if (pm_get_power_state_rx.power_state != expected_device_power_states[i])
+			else if (pm_get_power_state_rx.power_state != expected_get_device_power_states[i])
 				ret = MPXY_TEST_FAIL;
 
 			printf("       RPMI status[%u] = %s(%d)\n",
 				i, getRPMIString(pm_get_power_state_rx.status), pm_get_power_state_rx.status);
 			printf("              state[%u] = %s(%u), expected = %s(%u)\n",
 				i, getRPMIPowerStateString(pm_get_power_state_rx.power_state), pm_get_power_state_rx.power_state,
-				   getRPMIPowerStateString(expected_device_power_states[i]), expected_device_power_states[i]);
+				   getRPMIPowerStateString(expected_get_device_power_states[i]), expected_get_device_power_states[i]);
 		} else {
 			printf("sbi ecall[%u] return error(%ld)\n", i, sret.error);
 			ret = MPXY_TEST_FAIL;
@@ -142,7 +142,7 @@ int device_power_get_state(struct sbi_mpxy* mpxy)
 
 int device_power_set_state(struct sbi_mpxy* mpxy)
 {
-	printf("device_power_set_state\n");
+	printf("--- Test 04 - Set power state\n");
 	int ret = MPXY_TEST_SUCCESS;
 	struct sbiret sret;
 	unsigned long rx_bytes;
@@ -151,7 +151,7 @@ int device_power_set_state(struct sbi_mpxy* mpxy)
 
 	for (u32 i = 0; i < EXPECTED_NUMBER_OF_DOMAIN; i++) {
 		pm_set_power_state_tx.domain_id = i;
-		pm_set_power_state_tx.power_state = 1;
+		pm_set_power_state_tx.power_state = expected_set_device_power_states[i];
 		memcpy(mpxy->shmem, &pm_set_power_state_tx, sizeof(pm_set_power_state_tx));
 
 		sret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_SEND_MSG_WITH_RESP,
@@ -161,9 +161,15 @@ int device_power_set_state(struct sbi_mpxy* mpxy)
 			rx_bytes = sret.value;
 			rx_bytes = MIN(sizeof(pm_set_power_state_rx), rx_bytes);
 			memcpy(&pm_set_power_state_rx, mpxy->shmem, rx_bytes);
+			printf("       RPMI status[%u] = %s(%d)\n",
+				i, getRPMIString(pm_set_power_state_rx.status), pm_set_power_state_rx.status);
+		} else {
+			printf("sbi ecall[%u] return error(%ld)\n", i, sret.error);
+			ret = MPXY_TEST_FAIL;
 		}
-		printf("*** set_power_state status = %d\n", pm_set_power_state_rx.status);
 	}
+
+	printf("--- Test result : %s\n\n", (ret == MPXY_TEST_SUCCESS) ? "PASS" : "FAIL");
 
 	return ret;
 }

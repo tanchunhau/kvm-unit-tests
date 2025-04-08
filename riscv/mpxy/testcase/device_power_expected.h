@@ -19,9 +19,14 @@ const u32 expected_device_power_latencies[EXPECTED_NUMBER_OF_DOMAIN] =
 const u32 expected_device_power_flags[EXPECTED_NUMBER_OF_DOMAIN] =
         {6, 6, 6, 6, 6, 6};
 
-const u32 expected_device_power_states[EXPECTED_NUMBER_OF_DOMAIN] =
+const u32 expected_get_device_power_states[EXPECTED_NUMBER_OF_DOMAIN] =
         {RMPI_POWER_STATE_ON, RMPI_POWER_STATE_ON,
          RMPI_POWER_STATE_ON, RMPI_POWER_STATE_ON,
          RMPI_POWER_STATE_ON, RMPI_POWER_STATE_ON};
+
+const u32 expected_set_device_power_states[EXPECTED_NUMBER_OF_DOMAIN] =
+         {RMPI_POWER_STATE_OFF, RMPI_POWER_STATE_OFF,
+          RMPI_POWER_STATE_OFF, RMPI_POWER_STATE_OFF,
+          RMPI_POWER_STATE_OFF, RMPI_POWER_STATE_OFF};
 
 #endif // _MPXY_DEVICE_POWER_EXPECTED_H
