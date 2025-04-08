@@ -59,12 +59,12 @@ int strncmp(const char *a, const char *b, size_t n)
 		printf("n = %d ", n);
 		if (*a != *b) {
 
-			printf("k1 %d\n", int(*a - *b));
+			printf("k1 %d\n", (*a - *b));
 			return *a - *b;
 		}
 
 		if (*a == '\0') {
-			printf("k2 %d\n", int(*a - *b));
+			printf("k2 %d\n", (*a - *b));
 			return *a - *b;
 		}
 	}
