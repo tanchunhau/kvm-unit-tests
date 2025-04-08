@@ -70,7 +70,8 @@ int device_power_get_num_attributes(struct sbi_mpxy* mpxy)
 			else if (pm_get_domain_attrs_rx.flags != expected_device_power_flags[i])
 				ret = MPXY_TEST_FAIL;
 
-			printf("RPMI status[%u] = %s(%d)\n", i, getRPMIString(pm_get_domain_attrs_rx.status), pm_get_domain_attrs_rx.status);
+			printf("       RPMI status[%u] = %s(%d)\n",
+				i, getRPMIString(pm_get_domain_attrs_rx.status), pm_get_domain_attrs_rx.status);
 			printf("              name[%u] = %s, expected = %s\n",
 				i, pm_get_domain_attrs_rx.name, expected_device_power_names[i]);
 			printf("transition latency[%u] = %u, expected = %u\n",
