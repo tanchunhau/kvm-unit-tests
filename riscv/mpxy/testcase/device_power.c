@@ -78,6 +78,27 @@ void device_power_get_state(struct sbi_mpxy* mpxy)
 void device_power_set_state(struct sbi_mpxy* mpxy)
 {
 	printf("device_power_set_state\n");
+	struct sbiret sret;
+	unsigned long rx_bytes;
+	struct rpmi_pm_set_power_state_tx pm_set_power_state_tx;
+	struct rpmi_pm_set_power_state_rx pm_set_power_state_rx;
+
+	for (u32 i = 0; i < expected_number_of_domains; i++) {
+		pm_set_power_state_tx.domain_id = i;
+		pm_set_power_state_tx.power_state = 0;
+		memcpy(mpxy->shmem, &pm_set_power_state_tx, sizeof(pm_set_power_state_tx));
+
+		sret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_SEND_MSG_WITH_RESP,
+			channel_id, RPMI_DP_SRV_SET_STATE, sizeof(pm_set_power_state_tx), 0, 0, 0);
+
+		if (!sret.error) {
+			rx_bytes = sret.value;
+			rx_bytes = MIN(sizeof(pm_set_power_state_rx), rx_bytes);
+			memcpy(&pm_set_power_state_rx, mpxy->shmem, rx_bytes);
+		}
+		printf("*** set_power_state status = %d\n", pm_set_power_state_rx.status);
+	}
+
 }
 
 void run_device_power_test(struct sbi_mpxy* mpxy)
