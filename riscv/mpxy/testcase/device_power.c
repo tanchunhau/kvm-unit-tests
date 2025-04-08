@@ -126,7 +126,7 @@ int device_power_get_state(struct sbi_mpxy* mpxy)
 
 			printf("RPMI status[%u] = %s(%d)\n",
 				i, getRPMIString(pm_get_power_state_rx.status), pm_get_power_state_rx.status);
-			printf("      state[%u] = %s(%u),\texpected = %s(%u)\n",
+			printf("      state[%u] = %s(%u), expected = %s(%u)\n",
 				i, getRPMIPowerStateString(pm_get_power_state_rx.power_state), pm_get_power_state_rx.power_state,
 				   getRPMIPowerStateString(expected_get_device_power_states[i]), expected_get_device_power_states[i]);
 		} else {
