@@ -6,7 +6,6 @@
 #define _MPXY_H
 
 #include "testcase/device_power.h"
-#include <libcflat.h>
 
 #define MPXY_TEST_SUCCESS 0
 #define MPXY_TEST_FAIL   -1
