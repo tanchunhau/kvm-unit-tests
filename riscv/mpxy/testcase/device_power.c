@@ -178,6 +178,44 @@ int device_power_set_state(struct sbi_mpxy* mpxy)
 	return ret;
 }
 
+int device_power_get_num_attributes_with_wrong_domain_id(struct sbi_mpxy* mpxy)
+{
+	printf("--- Test 05 (negative) - Get domain attributes with wrong domain id\n");
+	int ret = MPXY_TEST_SUCCESS;
+	struct sbiret sret;
+	unsigned long rx_bytes;
+	struct rpmi_pm_get_domain_attrs_tx pm_get_domain_attrs_tx;
+	struct rpmi_pm_get_domain_attrs_rx pm_get_domain_attrs_rx;
+
+
+	pm_get_domain_attrs_tx.domain_id = EXPECTED_NUMBER_OF_DOMAIN + 1;
+
+	memcpy(mpxy->shmem, &pm_get_domain_attrs_tx, sizeof(pm_get_domain_attrs_tx));
+
+	sret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_SEND_MSG_WITH_RESP,
+		channel_id, RPMI_DP_SRV_GET_ATTRS, sizeof(pm_get_domain_attrs_tx), 0, 0, 0);
+
+	if (!sret.error) {
+		rx_bytes = sret.value;
+		rx_bytes = MIN(sizeof(pm_get_domain_attrs_rx), rx_bytes);
+		memcpy(&pm_get_domain_attrs_rx, mpxy->shmem, rx_bytes);
+
+		if (pm_get_domain_attrs_rx.status != RPMI_ERR_INVALID_PARAM)
+			ret = MPXY_TEST_FAIL;
+
+		printf("RPMI status = %s(%d), expected = %s(%d)\n",
+			getRPMIString(pm_get_domain_attrs_rx.status), pm_get_domain_attrs_rx.status,
+			getRPMIString(RPMI_ERR_INVALID_PARAM), RPMI_ERR_INVALID_PARAM);
+	} else {
+		printf("sbi ecall return error(%ld)\n", sret.error);
+		ret = MPXY_TEST_FAIL;
+	}
+
+	printf("--- Test result : %s\n\n", (ret == MPXY_TEST_SUCCESS) ? "PASS" : "FAIL");
+
+	return ret;
+}
+
 void run_device_power_test(struct sbi_mpxy* mpxy)
 {
 	if (!has_device_power)
