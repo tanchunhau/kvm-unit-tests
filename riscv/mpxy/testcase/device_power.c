@@ -85,7 +85,7 @@ void device_power_set_state(struct sbi_mpxy* mpxy)
 
 	for (u32 i = 0; i < expected_number_of_domains; i++) {
 		pm_set_power_state_tx.domain_id = i;
-		pm_set_power_state_tx.power_state = 0;
+		pm_set_power_state_tx.power_state = 1;
 		memcpy(mpxy->shmem, &pm_set_power_state_tx, sizeof(pm_set_power_state_tx));
 
 		sret = sbi_ecall(SBI_EXT_MPXY, SBI_EXT_MPXY_SEND_MSG_WITH_RESP,
