@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: GPL-2.0-only */
 
-bool has_device_power = true;
-u32 channel_id = 4098;
+const bool has_device_power = true;
+const u32 channel_id = 4098;
+const u32 expected_number_of_domains = 6;
 
-u32 expected_number_of_domains = 6;

@@ -136,28 +136,7 @@ struct rpmi_mbox_message {
 	int error;
 };
 
-/** RPMI clock service IDs */
-enum rpmi_clock_service_id {
-	RPMI_CLK_SRV_ENABLE_NOTIFICATION = 0x01,
-	RPMI_CLK_SRV_GET_NUM_CLOCKS = 0x02,
-	RPMI_CLK_SRV_GET_ATTRIBUTES = 0x03,
-	RPMI_CLK_SRV_GET_SUPPORTED_RATES = 0x04,
-	RPMI_CLK_SRV_SET_CONFIG = 0x05,
-	RPMI_CLK_SRV_GET_CONFIG = 0x06,
-	RPMI_CLK_SRV_SET_RATE = 0x07,
-	RPMI_CLK_SRV_GET_RATE = 0x08,
-	RPMI_CLK_SRV_ID_MAX_COUNT,
-};
 
-/* RPMI linux mailbox message helper routines */
-static inline void rpmi_mbox_init_get_attribute(struct rpmi_mbox_message *msg,
-	enum rpmi_mbox_attribute_id id)
-{
-	msg->type = RPMI_MBOX_MSG_TYPE_GET_ATTRIBUTE;
-	msg->attr.id = id;
-	msg->attr.value = 0;
-	msg->error = 0;
-}
 
 struct sbi_mpxy_rpmi_channel_attrs {
 	/* RPMI service group ID */
@@ -166,56 +145,7 @@ struct sbi_mpxy_rpmi_channel_attrs {
 	u32 servicegroup_version;
 };
 
-/* Service: GET_POWER_DOMAINS */
-struct rpmi_pm_get_num_domain_rx {
-	s32 status;
-	u32 num_domains;
-};
 
-/* Service: GET_POWER_DOMAIN_ATTRS */
-struct rpmi_pm_get_domain_attrs_tx {
-	u32 domain_id;
-};
-
-#define RPMI_PM_DOMAIN_NAME_LEN		16
-
-/* pm domain attributes response data */
-struct rpmi_pm_get_domain_attrs_rx {
-	s32 status;
-	u32 flags;
-	u32 transition_latency;
-	char name[RPMI_PM_DOMAIN_NAME_LEN];
-};
-
-/* Service: SET_POWER_DOMAIN_STATE */
-struct rpmi_pm_set_power_state_tx {
-	u32 domain_id;
-	u32 power_state;
-};
-
-struct rpmi_pm_set_power_state_rx {
-	s32 status;
-};
-
-/* Service: GET_POWER_DOMAIN_STATE */
-struct rpmi_pm_get_power_state_tx {
-	u32 domain_id;
-};
-
-struct rpmi_pm_get_power_state_rx {
-	s32 status;
-	u32 power_state;
-};
-
-/* RPMI Device Power Service IDs */
-enum rpmi_device_power_service_id {
-	RPMI_DP_SRV_ENABLE_NOTIFICATION = 0x01,
-	RPMI_DP_SRV_GET_NUM_DOMAINS  = 0x02,
-	RPMI_DP_SRV_GET_ATTRS = 0x03,
-	RPMI_DP_SRV_SET_STATE = 0x04,
-	RPMI_DP_SRV_GET_STATE = 0x05,
-	RPMI_DP_SRV_ID_MAX_COUNT,
-};
 
 
 /** RPMI error codes */
